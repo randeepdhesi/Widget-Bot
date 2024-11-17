@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Previous styles remain the same -->
+    <style>
+        /* Previous styles remain the same until options-container */
+        :root {
+            --primary: #2563eb;
+            --background: #ffffff;
+            --text: #1f2937;
+            --secondary: #f3f4f6;
+        }
+
+        .chat-toggle-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 30px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-toggle-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .chat-toggle-btn svg {
+            width: 24px;
+            height: 24px;
+            transition: transform 0.3s ease;
+        }
+
+        .chat-toggle-btn.active svg {
+            transform: rotate(180deg);
+        }
+
+        .chatbot-container {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            width: 360px;
+            background: var(--background);
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+            font-family: system-ui, -apple-system, sans-serif;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(100px);
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        .chatbot-container.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: all;
+        }
+
+        .chatbot-header {
+            padding: 16px;
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chatbot-messages {
+            height: 400px;
+            overflow-y: auto;
+            padding: 16px;
+        }
+
+        .message {
+            margin-bottom: 16px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.3s forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .bot-message {
+            background: var(--secondary);
+            padding: 12px 16px;
+            border-radius: 12px 12px 12px 0;
+            color: var(--text);
+            max-width: 80%;
+            margin-bottom: 8px;
+        }
+
+        .options-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .timeline-options {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .option-button {
+            background: white;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .option-button:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .option-button svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .option-button:hover svg {
+            fill: white;
+            stroke: white;
+        }
+
+        .user-message {
+            background: var(--primary);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 12px 12px 0 12px;
+            margin-left: auto;
+            max-width: 80%;
+        }
+
+        /* New styles for property cards */
+        .property-cards {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .property-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+
+        .property-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .property-image {
+            width: 100%;
+            height: 160px;
+            background: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .property-content {
+            padding: 12px;
+        }
+
+        .property-price {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .property-details {
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin-bottom: 12px;
+        }
+
+        .property-features {
+            display: flex;
+            gap: 12px;
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin-bottom: 12px;
+        }
+
+        .see-details-btn {
+            background: var(--primary);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            transition: opacity 0.2s;
+        }
+
+        .see-details-btn:hover {
+            opacity: 0.9;
+        }
+
+        @media (max-width: 480px) {
+            .chatbot-container {
+                width: calc(100% - 40px);
+                bottom: 90px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="chat-toggle-btn" id="chatToggle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+    </button>
+
+    <div class="chatbot-container" id="chatbotContainer">
+        <div class="chatbot-header">
+            Property Search Assistant
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+        </div>
+        <div class="chatbot-messages" id="messages"></div>
+    </div>
+
+    <script>
+        function _0x44b6(_0x53996e,_0x5a3e8c){const _0x1ebc2d=_0x1ebc();return _0x44b6=function(_0x44b67f,_0x325090){_0x44b67f=_0x44b67f-0xfe;let _0x525634=_0x1ebc2d[_0x44b67f];return _0x525634;},_0x44b6(_0x53996e,_0x5a3e8c);}const _0x488f1d=_0x44b6;(function(_0x3e24e8,_0x286dc1){const _0x4baf45=_0x44b6,_0x4ce7e6=_0x3e24e8();while(!![]){try{const _0x11b507=parseInt(_0x4baf45(0x10d))/0x1+-parseInt(_0x4baf45(0x106))/0x2+-parseInt(_0x4baf45(0x14b))/0x3*(parseInt(_0x4baf45(0x113))/0x4)+parseInt(_0x4baf45(0x125))/0x5*(parseInt(_0x4baf45(0x12f))/0x6)+parseInt(_0x4baf45(0x14c))/0x7+-parseInt(_0x4baf45(0x131))/0x8+parseInt(_0x4baf45(0x11c))/0x9;if(_0x11b507===_0x286dc1)break;else _0x4ce7e6['push'](_0x4ce7e6['shift']());}catch(_0x49ed74){_0x4ce7e6['push'](_0x4ce7e6['shift']());}}}(_0x1ebc,0xf0fc9),document[_0x488f1d(0x10e)](_0x488f1d(0x120),function(){const _0x233994=_0x488f1d,_0x33ca6f=document['getElementById'](_0x233994(0x110)),_0x56223d=document[_0x233994(0x13f)](_0x233994(0x13a)),_0x43929f=document[_0x233994(0x13f)](_0x233994(0x102));let _0x58690f={},_0x5a81cd=![];const _0x541d6b={'studio':_0x233994(0x118),'one':_0x233994(0x11f),'two':_0x233994(0x137),'three':'<svg\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22currentColor\x22\x20width=\x2224\x22\x20height=\x2224\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<path\x20d=\x22M3\x2019V7a2\x202\x200\x200\x201\x202-2h14a2\x202\x200\x200\x201\x202\x202v12\x22/>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<path\x20d=\x22M5\x2010h14\x22/>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<rect\x20x=\x225\x22\x20y=\x2212\x22\x20width=\x224\x22\x20height=\x224\x22\x20rx=\x221\x22/>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<rect\x20x=\x2210\x22\x20y=\x2212\x22\x20width=\x224\x22\x20height=\x224\x22\x20rx=\x221\x22/>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<rect\x20x=\x2215\x22\x20y=\x2212\x22\x20width=\x224\x22\x20height=\x224\x22\x20rx=\x221\x22/>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</svg>'};_0x56223d[_0x233994(0x10e)](_0x233994(0x10a),()=>{const _0x3b90c2=_0x233994;_0x56223d[_0x3b90c2(0x135)][_0x3b90c2(0x119)]('active'),_0x43929f[_0x3b90c2(0x135)][_0x3b90c2(0x119)](_0x3b90c2(0x143)),!_0x5a81cd&&_0x43929f[_0x3b90c2(0x135)][_0x3b90c2(0x13e)](_0x3b90c2(0x143))&&(setTimeout(_0x3d19a0,0x1f4),_0x5a81cd=!![]);});function _0x309fe2(_0x5a0eda,_0x4bda05=![]){const _0x148205=_0x233994,_0x76b26d=document[_0x148205(0x11b)](_0x148205(0x145));_0x76b26d[_0x148205(0x13d)]='message',_0x76b26d[_0x148205(0x148)]=_0x148205(0x127)+(_0x4bda05?'user-message':_0x148205(0x14f))+'\x22>'+_0x5a0eda+_0x148205(0x101),_0x33ca6f['appendChild'](_0x76b26d),_0x33ca6f[_0x148205(0x136)]=_0x33ca6f[_0x148205(0x115)];}function _0x3d19a0(){const _0x1bc9fa=_0x233994;_0x309fe2(_0x1bc9fa(0x139));const _0x39f157=document[_0x1bc9fa(0x11b)](_0x1bc9fa(0x145));_0x39f157[_0x1bc9fa(0x13d)]=_0x1bc9fa(0x14a);const _0x1831e4=document[_0x1bc9fa(0x11b)](_0x1bc9fa(0x145));_0x1831e4[_0x1bc9fa(0x13d)]='options-container\x20bedroom-options';const _0x17e657=[{'text':_0x1bc9fa(0x10c),'value':'studio'},{'text':_0x1bc9fa(0x134),'value':_0x1bc9fa(0x152)},{'text':_0x1bc9fa(0x130),'value':_0x1bc9fa(0x116)},{'text':'3\x20Bedrooms','value':_0x1bc9fa(0x129)}];_0x17e657[_0x1bc9fa(0x10f)](_0x43317c=>{const _0x3ac40d=_0x1bc9fa,_0x53ab8f=document[_0x3ac40d(0x11b)](_0x3ac40d(0x108));_0x53ab8f[_0x3ac40d(0x13d)]=_0x3ac40d(0x13c),_0x53ab8f[_0x3ac40d(0x148)]='\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20'+_0x541d6b[_0x43317c[_0x3ac40d(0x100)]]+'\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span>'+_0x43317c[_0x3ac40d(0x14e)]+'</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20',_0x53ab8f[_0x3ac40d(0x11d)]=()=>{const _0x5ee7f0=_0x3ac40d;_0x58690f['bedrooms']=_0x43317c[_0x5ee7f0(0x100)],_0x309fe2(_0x43317c[_0x5ee7f0(0x14e)],!![]),setTimeout(_0x408d3b,0x1f4);},_0x1831e4['appendChild'](_0x53ab8f);}),_0x39f157[_0x1bc9fa(0x11e)](_0x1831e4),_0x33ca6f[_0x1bc9fa(0x11e)](_0x39f157),_0x33ca6f[_0x1bc9fa(0x136)]=_0x33ca6f[_0x1bc9fa(0x115)];}function _0x408d3b(){const _0x5683e6=_0x233994;_0x309fe2(_0x5683e6(0x122));const _0x13280d=document[_0x5683e6(0x11b)](_0x5683e6(0x145));_0x13280d[_0x5683e6(0x13d)]=_0x5683e6(0x14a);const _0x564984=document[_0x5683e6(0x11b)](_0x5683e6(0x145));_0x564984[_0x5683e6(0x13d)]=_0x5683e6(0xff);const _0x56f38b=[{'text':_0x5683e6(0x111),'value':_0x5683e6(0x124)},{'text':_0x5683e6(0x10b),'value':_0x5683e6(0x126)}];_0x56f38b['forEach'](_0x48f856=>{const _0x58fef9=_0x5683e6,_0x2da94a=document[_0x58fef9(0x11b)](_0x58fef9(0x108));_0x2da94a[_0x58fef9(0x13d)]=_0x58fef9(0x13c),_0x2da94a['textContent']=_0x48f856[_0x58fef9(0x14e)],_0x2da94a[_0x58fef9(0x11d)]=()=>{const _0x199cc3=_0x58fef9;_0x58690f[_0x199cc3(0x128)]=_0x48f856['value'],_0x309fe2(_0x48f856[_0x199cc3(0x14e)],!![]),setTimeout(_0x1801e1,0x1f4);},_0x564984[_0x58fef9(0x11e)](_0x2da94a);}),_0x13280d[_0x5683e6(0x11e)](_0x564984),_0x33ca6f[_0x5683e6(0x11e)](_0x13280d),_0x33ca6f[_0x5683e6(0x136)]=_0x33ca6f[_0x5683e6(0x115)];}function _0x1801e1(){const _0x15e4ac=_0x233994;_0x309fe2(_0x15e4ac(0x12d));const _0x870ea3=document['createElement'](_0x15e4ac(0x145));_0x870ea3[_0x15e4ac(0x13d)]=_0x15e4ac(0x14a);const _0x4dd9f4=document[_0x15e4ac(0x11b)](_0x15e4ac(0x145));_0x4dd9f4[_0x15e4ac(0x13d)]=_0x15e4ac(0x107);const _0x5e7bb8=[{'text':'ASAP','value':_0x15e4ac(0x13b)},{'text':_0x15e4ac(0x12a),'value':_0x15e4ac(0x144)},{'text':_0x15e4ac(0x112),'value':_0x15e4ac(0x133)},{'text':_0x15e4ac(0x142),'value':_0x15e4ac(0x12e)}];_0x5e7bb8['forEach'](_0x3ee1e8=>{const _0x38f483=_0x15e4ac,_0x3f6f98=document[_0x38f483(0x11b)]('button');_0x3f6f98[_0x38f483(0x13d)]=_0x38f483(0x13c),_0x3f6f98[_0x38f483(0x109)]=_0x3ee1e8[_0x38f483(0x14e)],_0x3f6f98[_0x38f483(0x11d)]=()=>{const _0x598874=_0x38f483;_0x58690f['timeline']=_0x3ee1e8[_0x598874(0x100)],_0x309fe2(_0x3ee1e8[_0x598874(0x14e)],!![]),setTimeout(_0x492922,0x1f4);},_0x4dd9f4['appendChild'](_0x3f6f98);}),_0x870ea3[_0x15e4ac(0x11e)](_0x4dd9f4),_0x33ca6f[_0x15e4ac(0x11e)](_0x870ea3),_0x33ca6f['scrollTop']=_0x33ca6f['scrollHeight'];}function _0x492922(){const _0x29616c=_0x233994;_0x309fe2(_0x29616c(0x147));const _0x12971a=document[_0x29616c(0x11b)]('div');_0x12971a['className']=_0x29616c(0x14a);const _0x3b5bb0=document[_0x29616c(0x11b)](_0x29616c(0x145));_0x3b5bb0[_0x29616c(0x13d)]=_0x29616c(0x11a);const _0x44334d=[{'price':_0x29616c(0x149),'title':_0x29616c(0x123),'beds':'2','baths':'1','sqft':_0x29616c(0x141),'address':_0x29616c(0xfe),'img':'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyaminmellish-186077.jpg'},{'price':_0x29616c(0x105),'title':_0x29616c(0x12c),'beds':'2','baths':'2','sqft':_0x29616c(0x104),'address':'456\x20Park\x20Ave,\x20Midtown','img':_0x29616c(0x121)}];_0x44334d['forEach'](_0x3b9bdf=>{const _0xcf2202=_0x29616c,_0x20cfcb=document['createElement'](_0xcf2202(0x145));_0x20cfcb[_0xcf2202(0x13d)]='property-card',_0x20cfcb[_0xcf2202(0x148)]=_0xcf2202(0x150)+_0x3b9bdf['img']+_0xcf2202(0x103)+_0x3b9bdf[_0xcf2202(0x146)]+_0xcf2202(0x132)+_0x3b9bdf[_0xcf2202(0x114)]+_0xcf2202(0x151)+_0x3b9bdf['beds']+_0xcf2202(0x14d)+_0x3b9bdf['baths']+_0xcf2202(0x138)+_0x3b9bdf[_0xcf2202(0x12b)]+_0xcf2202(0x117)+_0x3b9bdf['address']+_0xcf2202(0x140),_0x3b5bb0[_0xcf2202(0x11e)](_0x20cfcb);}),_0x12971a[_0x29616c(0x11e)](_0x3b5bb0),_0x33ca6f['appendChild'](_0x12971a),_0x33ca6f[_0x29616c(0x136)]=_0x33ca6f['scrollHeight'];}}));function _0x1ebc(){const _0x36e5dd=['5708633YLMpVS','\x20Beds</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span>','text','bot-message','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22property-image\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<img\x20src=\x22','</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22property-features\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span>','one','123\x20Main\x20St,\x20Downtown','options-container','value','</div>','chatbotContainer','\x22\x20alt=\x22Property\x20Image\x22\x20style=\x22width:\x20100%;\x20height:\x20100%;\x20object-fit:\x20cover;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22property-content\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22property-price\x22>','1000','$2,200/month','3774044cuTPNc','options-container\x20timeline-options','button','textContent','click','$2,000+\x20/month','Studio','1067745bLNjur','addEventListener','forEach','messages','Up\x20to\x20$2,000/month','1-2\x20months','8vXpHXV','title','scrollHeight','two','\x20sq.ft</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22property-details\x22>','<svg\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22currentColor\x22\x20width=\x2224\x22\x20height=\x2224\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<path\x20d=\x22M20\x2010V7a2\x202\x200\x200\x200-2-2H6a2\x202\x200\x200\x200-2\x202v3\x22/>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<path\x20d=\x22M4\x2019v-3c0-1.1.9-2\x202-2h12a2\x202\x200\x200\x201\x202\x202v3\x22/>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<rect\x20x=\x228\x22\x20y=\x2210\x22\x20width=\x228\x22\x20height=\x226\x22\x20rx=\x221\x22/>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</svg>','toggle','property-cards','createElement','30161160MMemyp','onclick','appendChild','<svg\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22currentColor\x22\x20width=\x2224\x22\x20height=\x2224\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<path\x20d=\x22M3\x2019V7a2\x202\x200\x200\x201\x202-2h14a2\x202\x200\x200\x201\x202\x202v12\x22/>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<path\x20d=\x22M5\x2010h14\x22/>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<rect\x20x=\x227\x22\x20y=\x2212\x22\x20width=\x224\x22\x20height=\x224\x22\x20rx=\x221\x22/>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</svg>','DOMContentLoaded','https://cdn.britannica.com/05/157305-004-53D5D212.jpg','What\x27s\x20your\x20budget\x20range?','Modern\x20Downtown\x20Apartment','2000','5gbaSjN','2000plus','<div\x20class=\x22','budget','three','Within\x2030\x20days','sqft','Luxury\x20City\x20View\x20Condo','How\x20soon\x20are\x20you\x20looking\x20to\x20move?','90days','2233050CvZmWM','2\x20Bedrooms','9120192tmapIY','</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22property-details\x22>','60days','1\x20Bedroom','classList','scrollTop','<svg\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22currentColor\x22\x20width=\x2224\x22\x20height=\x2224\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<path\x20d=\x22M3\x2019V7a2\x202\x200\x200\x201\x202-2h14a2\x202\x200\x200\x201\x202\x202v12\x22/>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<path\x20d=\x22M5\x2010h14\x22/>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<rect\x20x=\x227\x22\x20y=\x2212\x22\x20width=\x224\x22\x20height=\x224\x22\x20rx=\x221\x22/>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<rect\x20x=\x2213\x22\x20y=\x2212\x22\x20width=\x224\x22\x20height=\x224\x22\x20rx=\x221\x22/>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</svg>','\x20Baths</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span>','How\x20many\x20bedrooms\x20are\x20you\x20looking\x20for?','chatToggle','asap','option-button','className','contains','getElementById','</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22see-details-btn\x22>See\x20Details</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','850','3+\x20months','active','30days','div','price','Here\x20are\x20some\x20properties\x20that\x20match\x20your\x20criteria:','innerHTML','$1,850/month','message','2388828OiTWkx'];_0x1ebc=function(){return _0x36e5dd;};return _0x1ebc();}
+    </script>
+</body>
+</html>
