@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Chatbot Widget Menu</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        .chatbot-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .main-button {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .main-button img {
+            width: 95%;
+            height: 95%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .options-container {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+
+        .chatbot-widget.active .options-container {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            margin-bottom: 10px;
+            padding: 10px 15px;
+            border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            white-space: nowrap;
+            transform: scale(0.8);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .chatbot-widget.active .option {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .chatbot-widget.active .option:nth-child(1) {
+            transition-delay: 0.1s;
+        }
+
+        .chatbot-widget.active .option:nth-child(2) {
+            transition-delay: 0.2s;
+        }
+
+        .chatbot-widget.active .option:nth-child(3) {
+            transition-delay: 0.3s;
+        }
+
+        .option-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .option:hover {
+            background-color: #f0f0f0;
+        }
+
+        .chatbot-window {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            width: 350px;
+            height: 600px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 1001;
+        }
+
+        .chatbot-header {
+            background-color: #3498db;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chatbot-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message {
+            max-width: 80%;
+            margin-bottom: 10px;
+            padding: 10px 15px;
+            border-radius: 15px;
+        }
+
+        .bot-message {
+            background-color: #f1f0f0;
+            align-self: flex-start;
+        }
+
+        .user-message {
+            background-color: #3498db;
+            color: white;
+            align-self: flex-end;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 10px;
+        }
+
+        .image-option,
+        .pill-option {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .image-option img {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            margin-right: 10px;
+        }
+
+        .pill-option {
+            justify-content: center;
+            background-color: white;
+            color: #3498db;
+        }
+
+        .pill-option:hover,
+        .image-option:hover {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .close-btn {
+            cursor: pointer;
+            color: white;
+            font-size: 20px;
+        }
+
+        .chatbot-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 10px;
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+        
+        .chatbot-widget.active .chatbot-options {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .chatbot-options .image-option,
+        .chatbot-options .pill-option {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            transform: scale(0.8);
+            opacity: 0;
+        }
+        
+        .chatbot-widget.active .chatbot-options .image-option,
+        .chatbot-widget.active .chatbot-options .pill-option {
+            transform: scale(1);
+            opacity: 1;
+        }
+        
+        .chatbot-options .image-option img {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            margin-right: 10px;
+        }
+        
+        .chatbot-options .pill-option {
+            justify-content: center;
+            background-color: white;
+            color: #3498db;
+        }
+        
+        .chatbot-options .pill-option:hover,
+        .chatbot-options .image-option:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        /* Staggered animation for options */
+        .chatbot-widget.active .chatbot-options .image-option:nth-child(1),
+        .chatbot-widget.active .chatbot-options .pill-option:nth-child(1) {
+            transition-delay: 0.1s;
+        }
+        
+        .chatbot-widget.active .chatbot-options .image-option:nth-child(2),
+        .chatbot-widget.active .chatbot-options .pill-option:nth-child(2) {
+            transition-delay: 0.2s;
+        }
+        
+        .chatbot-widget.active .chatbot-options .image-option:nth-child(3),
+        .chatbot-widget.active .chatbot-options .pill-option:nth-child(3) {
+            transition-delay: 0.3s;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="chatbot-window">
+        <div class="chatbot-header">
+            <span>Apartment Finder</span>
+            <span class="close-btn">×</span>
+        </div>
+        <div class="chatbot-messages"></div>
+    </div>
+    <div class="chatbot-widget">
+        <div class="options-container">
+            <div class="option" onclick="window.openChatbot()">
+                <div class="option-icon">
+                    <img width="24" height="24" src="https://img.icons8.com/emoji/24/check-mark-emoji.png"
+                        alt="check-mark-emoji" />
+                </div>
+                Check Availability
+            </div>
+            <div class="option">
+                <div class="option-icon">
+                    <img width="24" height="24" src="https://img.icons8.com/office/24/tags.png" alt="tags" />
+                </div>
+                Pricing & Specials
+            </div>
+            <div class="option">
+                <div class="option-icon">
+                    <img width="24" height="24"
+                        src="https://img.icons8.com/external-xnimrodx-blue-xnimrodx/24/external-signboard-city-scape-xnimrodx-blue-xnimrodx.png"
+                        alt="external-signboard-city-scape-xnimrodx-blue-xnimrodx" />
+                </div>
+                &nbsp;&nbsp;&nbsp;&nbsp;Book a Tour&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
+        </div>
+        <div class="main-button">
+            <img src="chatbot-logo.png" alt="Chat Menu">
+        </div>
+    </div>
+
+    <script>
+        const widget = document.querySelector('.chatbot-widget');
+        const mainButton = widget.querySelector('.main-button');
+
+        mainButton.addEventListener('click', function () {
+            widget.classList.toggle('active');
+        });
+
+        // Optional: Close when clicking outside
+        document.addEventListener('click', function (event) {
+            if (!widget.contains(event.target)) {
+                widget.classList.remove('active');
+            }
+        });
+    </script>
+    <script>
+        const chatbotWindow = document.querySelector('.chatbot-window');
+        const messagesContainer = document.querySelector('.chatbot-messages');
+        const closeBtn = document.querySelector('.close-btn');
+        
+        const conversationFlow = {
+            welcome: {
+                message: "Well hello there! How can I help you?",
+                options: [
+                    { type: 'image', label: 'Studio', image: 'img/studio-logo.png' },
+                    { type: 'image', label: '1 Bedroom', image: 'img/1bd-logo.png' },
+                ],
+                nextStep: 'budget'
+            },
+            budget: {
+                message: "And how much are you willing to spend each month?",
+                dynamicOptions: {
+                    'Studio': [
+                        { label: 'Starting at $1915' },
+                        { label: 'Starting at $2145' },
+                        { label: 'Any' }
+                    ],
+                    '1 Bedroom': [
+                        { label: 'Starting at $2415' },
+                        { label: 'Starting at $2845 (Unavailable)' },
+                        { label: 'Any' }
+                    ],
+                    '2 Bedrooms': [
+                        { label: 'Starting at $2695' },
+                        { label: 'Starting at $3115' },
+                        { label: 'Any' }
+                    ],
+                    '3 Bedrooms': [
+                        { label: 'Starting at $3275' },
+                        { label: 'Starting at $3715' },
+                        { label: 'Any' }
+                    ]
+                },
+                nextStep: 'moveIn'
+            },
+            moveIn: {
+                message: "When are you thinking of moving in?",
+                options: [
+                    { type: 'pill', label: 'ASAP' },
+                    { type: 'pill', label: 'Next 30 Days' },
+                    { type: 'pill', label: 'Next 60 Days' },
+                    { type: 'pill', label: 'Next 90 Days' }
+                ],
+                nextStep: 'availability'
+            },
+            availability: {
+                message: "Studio Availability:",
+                options: null
+            }
+        };
+        
+        let currentStep = 'welcome';
+        let selectedBedroom = null;
+        let selectedBudget = null;
+        let selectedMoveIn = null;
+        
+        function addMessage(message, type = 'bot') {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', `${type}-message`);
+            messageElement.textContent = message;
+            messagesContainer.appendChild(messageElement);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+        
+        function clearOptions() {
+            const optionsContainer = document.querySelector('.chatbot-options');
+            if (optionsContainer) optionsContainer.remove();
+        }
+        
+        function renderOptions(options, optionType = 'image') {
+            // Always clear existing options first
+            clearOptions();
+        
+            // If no options, exit early
+            if (!options || options.length === 0) return;
+            console.log("Checking options")
+        
+            const optionsContainer = document.createElement('div');
+            optionsContainer.classList.add('chatbot-options');
+        
+            options.forEach(option => {
+                const optionElement = document.createElement('div');
+                optionElement.classList.add(optionType === 'image' ? 'image-option' : 'pill-option');
+        
+                if (optionType === 'image') {
+                    const img = document.createElement('img');
+                    img.src = option.image;
+                    console.log(img.src);
+                    optionElement.appendChild(img);
+        
+                    const label = document.createElement('span');
+                    label.textContent = option.label;
+                    optionElement.appendChild(label);
+                } else {
+                    optionElement.textContent = option.label;
+                }
+        
+                optionElement.addEventListener('click', () => handleOptionClick(option));
+                optionsContainer.appendChild(optionElement);
+            });
+        
+            messagesContainer.appendChild(optionsContainer);
+        }
+        
+        function handleOptionClick(option) {
+            switch (currentStep) {
+                case 'welcome':
+                    selectedBedroom = option.label;
+                    addMessage(option.label, 'user');
+                    setTimeout(() => {
+                        addMessage(conversationFlow.budget.message);
+                        renderOptions(
+                            conversationFlow.budget.dynamicOptions[selectedBedroom].map(opt => ({
+                                type: 'pill',
+                                label: opt.label
+                            })), 
+                            'pill'
+                        );
+                        currentStep = 'budget';
+                    }, 500);
+                    break;
+        
+                case 'budget':
+                    selectedBudget = option.label;
+                    addMessage(option.label, 'user');
+                    setTimeout(() => {
+                        addMessage(conversationFlow.moveIn.message);
+                        renderOptions(conversationFlow.moveIn.options, 'pill');
+                        currentStep = 'moveIn';
+                    }, 500);
+                    break;
+        
+                case 'moveIn':
+                    selectedMoveIn = option.label;
+                    addMessage(option.label, 'user');
+                    setTimeout(() => {
+                        addMessage(conversationFlow.availability.message);
+                        clearOptions();
+                        currentStep = 'availability';
+                    }, 500);
+                    break;
+            }
+        }
+        
+        // Close button functionality
+        closeBtn.addEventListener('click', () => {
+            chatbotWindow.style.display = 'none';
+            messagesContainer.innerHTML = '';
+            currentStep = 'welcome';
+            selectedBedroom = null;
+            selectedBudget = null;
+            selectedMoveIn = null;
+        });
+        
+        // Expose function to open chatbot from external widget
+        window.openChatbot = function () {
+            chatbotWindow.style.display = 'flex';
+            messagesContainer.innerHTML = ''; // Clear any previous messages
+            currentStep = 'welcome';
+            addMessage(conversationFlow.welcome.message);
+            
+            // Ensure welcome options are rendered after a short delay
+            setTimeout(() => {
+                renderOptions(conversationFlow.welcome.options);
+            }, 100);
+        }
+    </script>
+</body>
+
+</html>
