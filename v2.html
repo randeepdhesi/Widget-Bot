@@ -222,7 +222,6 @@
             transform: translateY(0);
         }
 
-        .chatbot-options .image-option,
         .chatbot-options .pill-option {
             display: flex;
             align-items: center;
@@ -231,6 +230,17 @@
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
+        }
+
+        .chatbot-options .image-option {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 70px;
         }
 
         .chatbot-widget.active .chatbot-options .image-option,
@@ -281,6 +291,75 @@
             /* Enable vertical scrolling */
             display: flex;
             flex-direction: column;
+        }
+
+        /* New styles for property cards */
+        .property-cards {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .property-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+
+        .property-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .property-image {
+            width: 100%;
+            height: 160px;
+            background: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .property-content {
+            padding: 12px;
+        }
+
+        .property-price {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .property-details {
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin-bottom: 12px;
+        }
+
+        .property-features {
+            display: flex;
+            gap: 12px;
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin-bottom: 12px;
+        }
+
+        .see-details-btn {
+            background: var(--primary);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            transition: opacity 0.2s;
+        }
+
+        .see-details-btn:hover {
+            opacity: 0.9;
         }
     </style>
 </head>
@@ -470,42 +549,6 @@
             }, 50);
         }
 
-        function handleOptionClick(option) {
-            switch (currentStep) {
-                case 'welcome':
-                    selectedBedroom = option.label;
-                    addMessage(option.label, 'user');
-                    setTimeout(() => {
-                        addMessage(conversationFlow.budget.message);
-                        renderOptions(
-                            conversationFlow.budget.dynamicOptions[selectedBedroom],
-                            'pill'
-                        );
-                        currentStep = 'budget';
-                    }, 500);
-                    break;
-
-                case 'budget':
-                    selectedBudget = option.label;
-                    addMessage(option.label, 'user');
-                    setTimeout(() => {
-                        addMessage(conversationFlow.moveIn.message);
-                        renderOptions(conversationFlow.moveIn.options, 'pill');
-                        currentStep = 'moveIn';
-                    }, 500);
-                    break;
-
-                case 'moveIn':
-                    selectedMoveIn = option.label;
-                    addMessage(option.label, 'user');
-                    setTimeout(() => {
-                        addMessage(conversationFlow.availability.message);
-                        clearOptions();
-                        currentStep = 'availability';
-                    }, 500);
-                    break;
-            }
-        }
 
         // Close button functionality
         closeBtn.addEventListener('click', () => {
@@ -532,6 +575,154 @@
                 renderOptions(conversationFlow.welcome.options);
             }, 100);
         }
+
+        // Example of property listings, could be fetched from a database or API
+        const propertyListings = [
+            {
+                price: "$1,915/month",
+                title: "S1",
+                beds: "1",
+                baths: "1",
+                sqft: "390",
+                address: "123 Main St, Downtown",
+                type: "Studio",
+                image: "https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyaminmellish-186077.jpg"
+            },
+            {
+                price: "$2,145/month",
+                title: "S3",
+                beds: "1",
+                baths: "1",
+                sqft: "464",
+                address: "456 High St, Downtown",
+                type: "Studio",
+                image: "https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyaminmellish-186077.jpg&fm=jpg"
+            },
+            {
+                price: "$2,415/month",
+                title: "A1",
+                beds: "1",
+                baths: "1",
+                sqft: "624",
+                address: "789 Oak St, Downtown",
+                type: "1 Bedroom",
+                image: "https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyaminmellish-186077.jpg&fm=jpg"
+            },
+            {
+                price: "$2,300/month",
+                title: "Luxury Penthouse Suite",
+                beds: "3",
+                baths: "2",
+                sqft: "1600",
+                address: "101 Maple St, Downtown",
+                type: "3 Bedrooms",
+                image: "https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyaminmellish-186077.jpg&fm=jpg"
+            },
+            {
+                price: "$1,750/month",
+                title: "Affordable City Apartment",
+                beds: "1",
+                baths: "1",
+                sqft: "450",
+                address: "202 Pine St, Downtown",
+                type: "Studio",
+                image: "https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyaminmellish-186077.jpg&fm=jpg"
+            }
+        ];
+
+        // Function to filter properties based on user's selection
+        function filterProperties(bedroomType, budget) {
+            return propertyListings.filter(property => {
+                const price = parseInt(property.price.replace(/[^\d]/g, ''), 10);
+                const maxBudget = parseInt(budget.replace(/[^\d]/g, ''), 10);
+
+                // Return properties that match bedroom type and price range
+                return property.type === bedroomType && price <= maxBudget;
+            });
+        }
+
+        function generateCard(property) {
+            const card = document.createElement('div');
+            card.classList.add('property-card');
+
+            card.innerHTML = `
+                <div class="property-image">
+                            <img src="${property.image}" alt="Property Image" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <div class="property-content">
+                            <div class="property-price">${property.price}</div>
+                            <div class="property-details">${property.title}</div>
+                            <div class="property-features">
+                                <span>${property.beds} Beds</span>
+                                <span>${property.baths} Baths</span>
+                                <span>${property.sqft} sq.ft</span>
+                            </div>
+                            <div class="property-details">${property.address}</div>
+                            <button class="see-details-btn">See Details</button>
+                        </div>
+            `;
+
+            // Add the card to the container
+            messagesContainer.appendChild(card);
+
+            // Add event listener for the "See Details" button
+            const seeDetailsButton = card.querySelector('.see-details-btn');
+            seeDetailsButton.addEventListener('click', () => {
+                alert('Redirecting to details page...');
+            });
+
+            // Scroll to the bottom of the container
+            scrollToBottom();
+        }
+
+
+        function handleOptionClick(option) {
+            switch (currentStep) {
+                case 'welcome':
+                    selectedBedroom = option.label;
+                    addMessage(option.label, 'user');
+                    setTimeout(() => {
+                        addMessage(conversationFlow.budget.message);
+                        renderOptions(
+                            conversationFlow.budget.dynamicOptions[selectedBedroom],
+                            'pill'
+                        );
+                        currentStep = 'budget';
+                    }, 500);
+                    break;
+                case 'budget':
+                    selectedBudget = option.label;
+                    addMessage(option.label, 'user');
+                    setTimeout(() => {
+                        addMessage(conversationFlow.moveIn.message);
+                        renderOptions(conversationFlow.moveIn.options, 'pill');
+                        currentStep = 'moveIn';
+                    }, 500);
+                    break;
+
+                case 'moveIn':
+                    selectedMoveIn = option.label;
+                    addMessage(option.label, 'user');
+                    setTimeout(() => {
+                        addMessage(conversationFlow.availability.message);
+                        clearOptions();
+                        // Filter properties based on selected bedroom type and budget
+                        const filteredProperties = filterProperties(selectedBedroom, selectedBudget);
+
+                        // If properties exist, generate cards
+                        if (filteredProperties.length > 0) {
+                            filteredProperties.forEach(property => {
+                                generateCard(property);
+                            });
+                        } else {
+                            addMessage("Sorry, no properties match your selection.");
+                        }
+                        currentStep = 'availability';
+                    }, 500);
+                    break;
+            }
+        }
+
     </script>
 </body>
 
