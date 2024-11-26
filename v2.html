@@ -46,9 +46,9 @@
             display: flex;
             flex-direction: column;
             align-items: flex-end;
-            opacity: 1;
+            opacity: 0;
             /* Ensure it is fully visible */
-            visibility: visible;
+            visibility: hidden;
             /* Make it visible */
             transform: translateY(0);
             /* Reset any translation */
@@ -570,6 +570,7 @@
             // Add welcome message
             addMessage(conversationFlow.welcome.message);
 
+            widget.classList.remove('active');
             // Render welcome options after a short delay
             setTimeout(() => {
                 renderOptions(conversationFlow.welcome.options);
@@ -586,7 +587,7 @@
                 sqft: "390",
                 address: "123 Main St, Downtown",
                 type: "Studio",
-                image: "https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyaminmellish-186077.jpg"
+                image: "img/studio-logo.png"
             },
             {
                 price: "$2,145/month",
@@ -647,7 +648,7 @@
 
             card.innerHTML = `
                 <div class="property-image">
-                            <img src="${property.image}" alt="Property Image" style="width: 100%; height: 100%; object-fit: cover;">
+                            <img src="${property.image}" alt="Property Image" style="width: 100px; height: 100px; object-fit: cover;">
                         </div>
                         <div class="property-content">
                             <div class="property-price">${property.price}</div>
