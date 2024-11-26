@@ -48,7 +48,7 @@
             align-items: flex-end;
             opacity: 1;
             /* Ensure it is fully visible */
-            visibility: 1;
+            visibility: visible;
             /* Make it visible */
             transform: translateY(0);
             /* Reset any translation */
@@ -446,9 +446,9 @@
                     optionElement.appendChild(img);
 
                     // Uncomment if you want to add label back
-                    const label = document.createElement('span');
-                    label.textContent = option.label;
-                    optionElement.appendChild(label);
+                    //const label = document.createElement('span');
+                    //label.textContent = option.label;
+                    //optionElement.appendChild(label);
                 } else {
                     optionElement.textContent = option.label;
                 }
