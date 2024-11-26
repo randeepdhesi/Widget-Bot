@@ -48,7 +48,7 @@
             align-items: flex-end;
             opacity: 1;
             /* Ensure it is fully visible */
-            visibility: visible;
+            visibility: 1;
             /* Make it visible */
             transform: translateY(0);
             /* Reset any translation */
@@ -152,7 +152,7 @@
             word-wrap: break-word;
             clear: both;
         }
-        
+
 
         .bot-message {
             background-color: #f1f0f0;
@@ -215,6 +215,7 @@
             gap: 10px;
             margin-top: 10px;
         }
+
         .chatbot-widget.active .chatbot-options {
             opacity: 1;
             visibility: visible;
@@ -401,10 +402,17 @@
         function addMessage(message, type = 'bot') {
             const messageElement = document.createElement('div');
             messageElement.classList.add('message', `${type}-message`);
-            messageElement.textContent = message;
-            messagesContainer.appendChild(messageElement);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
+            // Handle potential HTML content
+            if (typeof message === 'string') {
+                messageElement.textContent = message;
+            } else {
+                messageElement.innerHTML = message;
+            }
+
+            messagesContainer.appendChild(messageElement);
+
+            // Ensure scroll to bottom
             scrollToBottom();
         }
 
@@ -430,12 +438,17 @@
                 if (option.type === 'image') {
                     const img = document.createElement('img');
                     img.src = option.image;
-                    console.log()
+                    img.alt = option.label;
+                    img.onerror = () => {
+                        console.warn(`Failed to load image: ${option.image}`);
+                        img.style.display = 'none';
+                    };
                     optionElement.appendChild(img);
 
-                    //const label = document.createElement('span');
-                    //label.textContent = option.label;
-                    //optionElement.appendChild(label); 
+                    // Uncomment if you want to add label back
+                    const label = document.createElement('span');
+                    label.textContent = option.label;
+                    optionElement.appendChild(label);
                 } else {
                     optionElement.textContent = option.label;
                 }
@@ -446,14 +459,15 @@
 
             messagesContainer.appendChild(optionsContainer);
 
+            // Scroll to bottom
             scrollToBottom();
         }
 
         function scrollToBottom() {
-            // Use requestAnimationFrame to ensure DOM has updated
-            requestAnimationFrame(() => {
+            // Slight delay to ensure DOM updates
+            setTimeout(() => {
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            });
+            }, 50);
         }
 
         function handleOptionClick(option) {
@@ -497,6 +511,7 @@
         closeBtn.addEventListener('click', () => {
             chatbotWindow.style.display = 'none';
             messagesContainer.innerHTML = '';
+            messagesContainer.scrollTop = 0;
             currentStep = 'welcome';
             selectedBedroom = null;
             selectedBudget = null;
@@ -508,9 +523,11 @@
             chatbotWindow.style.display = 'flex';
             messagesContainer.innerHTML = ''; // Clear any previous messages
             currentStep = 'welcome';
+
+            // Add welcome message
             addMessage(conversationFlow.welcome.message);
 
-            // Ensure welcome options are rendered after a short delay
+            // Render welcome options after a short delay
             setTimeout(() => {
                 renderOptions(conversationFlow.welcome.options);
             }, 100);
