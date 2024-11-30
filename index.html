@@ -448,6 +448,67 @@
         .submit-btn:hover {
             background-color: #2980b9;
         }
+
+        .carousel-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .carousel {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            height: 100%;
+            width: 100%;
+        }
+
+        .carousel-slide {
+            flex-shrink: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* Ensures image covers the slide area without distortion */
+            border-radius: 15px;
+            /* Matches chatbot window's border radius */
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            z-index: 10;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carousel-btn-left {
+            left: 10px;
+        }
+
+        .carousel-btn-right {
+            right: 10px;
+        }
     </style>
 </head>
 
@@ -484,7 +545,7 @@
             </div>
         </div>
         <div class="main-button" onclick="main()">
-            <img src="chatbot-logo.png" alt="Chat Menu">
+            <img src="img/chatbot-logo.png" alt="Chat Menu">
         </div>
     </div>
 
@@ -575,6 +636,17 @@
                 options: [
                     { type: 'pill', label: 'Email' },
                     { type: 'pill', label: 'Phone' }
+                ]
+            },
+
+            main: {
+                message: "Well hello there! How can I help you?",
+                options: [
+                    { type: 'pill', label: 'Pet Policy' },
+                    { type: 'pill', label: 'Amenities' },
+                    { type: 'pill', label: 'Neighbourhood' },
+                    { type: 'pill', label: 'Location' },
+                    { type: 'pill', label: 'Business Hours' }
                 ]
             }
 
@@ -731,12 +803,16 @@
             messagesContainer.innerHTML = ''; // Clear any previous messages
             currentStep = 'main';
 
-            addMessage(conversationFlow.booking.message);
+            addMessage(conversationFlow.main.message);
+
+            setTimeout(() => {
+                Carousel();
+            }, 300);
 
             // Render welcome options after a short delay
             setTimeout(() => {
-                renderOptions(conversationFlow.booking.options);
-            }, 100);
+                renderOptions(conversationFlow.main.options);
+            }, 400);
         }
 
 
@@ -846,6 +922,58 @@
             // Scroll to the bottom of the container
             scrollToBottom();
         }
+
+        function Carousel() {
+            const carouselContainer = document.createElement('div');
+            carouselContainer.classList.add('carousel-container');
+
+            // Carousel structure
+            carouselContainer.innerHTML = `
+                <div class="carousel">
+                    <div class="carousel-track">
+                        <div class="carousel-slide"><img src="img/1.png" alt="Image 1"></div>
+                        <div class="carousel-slide"><img src="img/2.png" alt="Image 2"></div>
+                        <div class="carousel-slide"><img src="img/3.png" alt="Image 3"></div>
+                        <div class="carousel-slide"><img src="img/4.png" alt="Image 4"></div>
+                        <div class="carousel-slide"><img src="img/5.png" alt="Image 5"></div>
+                        <div class="carousel-slide"><img src="img/6.png" alt="Image 6"></div>
+                    </div>
+                    <button class="carousel-btn carousel-btn-left">&lt;</button>
+                    <button class="carousel-btn carousel-btn-right">&gt;</button>
+                </div>
+            `;
+
+            messagesContainer.appendChild(carouselContainer);
+
+            // Carousel logic
+            const track = carouselContainer.querySelector('.carousel-track');
+            const slides = Array.from(track.children);
+            const nextButton = carouselContainer.querySelector('.carousel-btn-right');
+            const prevButton = carouselContainer.querySelector('.carousel-btn-left');
+            const slideWidth = slides[0].getBoundingClientRect().width;
+
+            // Arrange slides next to each other
+            slides.forEach((slide, index) => {
+                slide.style.left = `${index * slideWidth}px`;
+            });
+
+            let currentIndex = 0;
+
+            const updateCarousel = () => {
+                track.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+            };
+
+            nextButton.addEventListener('click', () => {
+                currentIndex = (currentIndex + 1) % slides.length;
+                updateCarousel();
+            });
+
+            prevButton.addEventListener('click', () => {
+                currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+                updateCarousel();
+            });
+        }
+
 
         function CalenderEmailForm() {
             const formContainer = document.createElement('div');
