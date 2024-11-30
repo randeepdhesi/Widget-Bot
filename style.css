@@ -1,0 +1,504 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+
+.chatbot-widget {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 10;
+}
+
+.main-button {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.main-button img {
+    width: 95%;
+    height: 95%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.options-container {
+    position: absolute;
+    bottom: 80px;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    opacity: 0;
+    /* Ensure it is fully visible */
+    visibility: hidden;
+    /* Make it visible */
+    transform: translateY(0);
+    /* Reset any translation */
+    transition: all 0.3s ease;
+    /* Add a smooth transition for changes */
+    z-index: 1000;
+    /* Ensure it appears above other elements */
+}
+
+
+.chatbot-widget.active .options-container {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.option {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    margin-bottom: 10px;
+    padding: 10px 15px;
+    border-radius: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    white-space: nowrap;
+    transform: scale(0.8);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.chatbot-widget.active .option {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.chatbot-widget.active .option:nth-child(1) {
+    transition-delay: 0.1s;
+}
+
+.chatbot-widget.active .option:nth-child(2) {
+    transition-delay: 0.2s;
+}
+
+.chatbot-widget.active .option:nth-child(3) {
+    transition-delay: 0.3s;
+}
+
+.option-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.option:hover {
+    background-color: #f0f0f0;
+}
+
+.chatbot-window {
+    position: fixed;
+    bottom: 100px;
+    right: 20px;
+    width: 400px;
+    height: 600px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 100;
+}
+
+.chatbot-header {
+    background-color: #3498db;
+    color: white;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chatbot-messages {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    scroll-behavior: smooth;
+    max-height: calc(600px - 100px);
+}
+
+.message {
+    max-width: 80%;
+    margin-bottom: 10px;
+    padding: 10px 15px;
+    border-radius: 15px;
+    word-wrap: break-word;
+    clear: both;
+}
+
+
+.bot-message {
+    background-color: #f1f0f0;
+    align-self: flex-start;
+}
+
+.user-message {
+    background-color: #3498db;
+    color: white;
+    align-self: flex-end;
+}
+
+.options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+}
+
+.image-option,
+.pill-option {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border: 2px solid #3498db;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.image-option img {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    margin-right: 10px;
+}
+
+.pill-option {
+    justify-content: center;
+    background-color: white;
+    color: #3498db;
+}
+
+.pill-option:hover,
+.image-option:hover {
+    background-color: #3498db;
+    color: white;
+}
+
+.close-btn {
+    cursor: pointer;
+    color: white;
+    font-size: 20px;
+}
+
+.chatbot-options {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.chatbot-widget.active .chatbot-options {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.chatbot-options .pill-option {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border: 2px solid #3498db;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.chatbot-options .image-option {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border: 2px solid #3498db;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 70px;
+}
+
+.chatbot-widget.active .chatbot-options .image-option,
+.chatbot-widget.active .chatbot-options .pill-option {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.chatbot-options .image-option img {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    margin-right: 10px;
+}
+
+.chatbot-options .pill-option {
+    justify-content: center;
+    background-color: white;
+    color: #3498db;
+}
+
+.chatbot-options .pill-option:hover,
+.chatbot-options .image-option:hover {
+    background-color: #3498db;
+    color: white;
+}
+
+/* Staggered animation for options */
+.chatbot-widget.active .chatbot-options .image-option:nth-child(1),
+.chatbot-widget.active .chatbot-options .pill-option:nth-child(1) {
+    transition-delay: 0.1s;
+}
+
+.chatbot-widget.active .chatbot-options .image-option:nth-child(2),
+.chatbot-widget.active .chatbot-options .pill-option:nth-child(2) {
+    transition-delay: 0.2s;
+}
+
+.chatbot-widget.active .chatbot-options .image-option:nth-child(3),
+.chatbot-widget.active .chatbot-options .pill-option:nth-child(3) {
+    transition-delay: 0.3s;
+}
+
+.messages-container {
+    max-height: 400px;
+    /* Adjust as needed for the chatbot's size */
+    overflow-y: auto;
+    /* Enable vertical scrolling */
+    display: flex;
+    flex-direction: column;
+}
+
+.property-card{
+    margin: 10px auto;
+}
+
+.property-image {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.property-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.2s ease;
+}
+.property-content {
+    padding: 12px;
+    background-color: #f9fafb; /* Light gray background */
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); /* Slightly darker shadow */
+}
+
+.property-price {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #1a202c; /* Darker text color for better readability */
+    margin-bottom: 8px;
+}
+
+.property-details {
+    color: #4a5568; /* Slightly darker gray for details */
+    font-size: 1rem;
+    margin-bottom: 8px;
+}
+
+.property-features {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f9fafb; /* Light blue-gray background */
+    border-radius: 4px;
+    padding: 12px;
+    font-size: 1rem;
+    color: #2d3748; /* Darker gray for text */
+}
+
+.property-features span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-left: 13px;
+    font-size: 1.2rem;
+    color: #2c5282; /* Darker blue for feature text */
+}
+
+.property-features span i {
+    font-size: 1.5rem;
+    color: #2b6cb0; /* Adjusted icon color to darker blue */
+}
+
+.property-features span img {
+    width: 18px;
+    height: 18px;
+}
+
+.property-features span.beds,
+.property-features span.baths {
+    font-size: 1.2rem;
+}
+
+.see-details-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #2b6cb0; /* Slightly darker blue */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: background-color 0.2s ease;
+}
+
+.see-details-btn:hover {
+    background-color: #2c5282; /* Even darker blue for hover state */
+}
+
+/* Container for the form */
+.form-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-height: 100%;
+    overflow-y: auto;
+    background-color: white;
+}
+
+/* General form styling */
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Styling for individual form fields */
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-field label {
+    font-size: 14px;
+    color: #333;
+}
+
+.form-field input,
+.form-field textarea {
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid #3498db;
+    font-size: 14px;
+}
+
+.form-field textarea {
+    resize: none;
+    /* Prevent resizing */
+}
+
+/* Styling for the submit button */
+.submit-btn {
+    padding: 10px 15px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+    background-color: #2980b9;
+}
+
+.carousel-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.carousel {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    height: 100%;
+    width: 100%;
+}
+
+.carousel-slide {
+    flex-shrink: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.carousel-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Ensures image covers the slide area without distortion */
+    border-radius: 15px;
+    /* Matches chatbot window's border radius */
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    z-index: 10;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.carousel-btn-left {
+    left: 10px;
+}
+
+.carousel-btn-right {
+    right: 10px;
+}
+
+.carousel-container.hidden {
+    visibility: hidden;
+    opacity: 0;
+}
