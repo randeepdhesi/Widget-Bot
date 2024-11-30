@@ -3,7 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Chatbot Widget Menu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
     <style>
         body {
             margin: 0;
@@ -300,14 +301,14 @@
             border-top-left-radius: 8px;
             border-top-right-radius: 8px;
         }
-        
+
         .property-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             transition: transform 0.2s ease;
         }
-        
+
         .property-content {
             padding: 12px;
             background-color: #ffffff;
@@ -315,56 +316,77 @@
             border-bottom-right-radius: 8px;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
         }
-        
+
         .property-price {
-            font-size: 1.2rem;
+            font-size: 1.4rem;
+            /* Increased price font size */
             font-weight: 700;
             color: #2c3e50;
             margin-bottom: 8px;
         }
-        
+
         .property-details {
             color: #7f8c8d;
-            font-size: 0.9rem;
+            font-size: 1rem;
+            /* Increased details font size */
             margin-bottom: 8px;
         }
-        
+
         .property-features {
             display: flex;
             justify-content: space-between;
             align-items: center;
             background-color: #f5f5f5;
             border-radius: 4px;
-            padding: 10px;
-            font-size: 0.9rem;
+            padding: 12px;
+            font-size: 1rem;
+            /* Increased font size for features */
             color: #555;
-          }
-          
-          .property-features span {
+        }
+
+        .property-features span {
             display: flex;
             align-items: center;
-            gap: 6px;
-          }
-          
-          .property-features span i {
-            font-size: 1.1rem;
+            gap: 10px;
+            /* Increased gap between icon and number */
+            font-size: 1.2rem;
+            /* Increased font size for feature text */
+        }
+
+        .property-features span i {
+            font-size: 1.5rem;
+            /* Increased icon size */
             color: #3498db;
-          }
-        
+        }
+
+        .property-features span img {
+            width: 18px;
+            /* Icon size for beds and baths */
+            height: 18px;
+        }
+
+        .property-features span.beds,
+        .property-features span.baths {
+            font-size: 1.2rem;
+            /* Increased font size for bed and bath numbers */
+        }
+
         .see-details-btn {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
+            /* Increased padding for the button */
             background-color: #3498db;
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 1rem;
+            /* Increased button font size */
             font-weight: 600;
             text-transform: uppercase;
             transition: background-color 0.2s ease;
         }
-        
+
         .see-details-btn:hover {
             background-color: #2980b9;
         }
@@ -381,18 +403,18 @@
     </div>
     <div class="chatbot-widget">
         <div class="options-container">
-            <div class="option" onclick="window.openChatbot()">
+            <div class="option" onclick="openPricingSpecialsChat()">
+                <div class="option-icon">
+                    <img width="24" height="24" src="https://img.icons8.com/office/24/tags.png" alt="tags" />
+                </div>
+                Pricing & Specials
+            </div>
+            <div class="option" onclick="openChatbot()">
                 <div class="option-icon">
                     <img width="24" height="24" src="https://img.icons8.com/emoji/24/check-mark-emoji.png"
                         alt="check-mark-emoji" />
                 </div>
                 Check Availability
-            </div>
-            <div class="option">
-                <div class="option-icon">
-                    <img width="24" height="24" src="https://img.icons8.com/office/24/tags.png" alt="tags" />
-                </div>
-                Pricing & Specials
             </div>
             <div class="option">
                 <div class="option-icon">
@@ -416,7 +438,6 @@
             widget.classList.toggle('active');
         });
 
-        // Optional: Close when clicking outside
         document.addEventListener('click', function (event) {
             if (!widget.contains(event.target)) {
                 widget.classList.remove('active');
@@ -427,69 +448,64 @@
         const messagesContainer = document.querySelector('.chatbot-messages');
         const closeBtn = document.querySelector('.close-btn');
 
-        const conversationFlow = {
+        const pricingSpecialsFlow = {
             welcome: {
-                message: "Well hello there! How can I help you?",
+                message: "Enjoy Up to 15% Off Pre-sales on Select Floorplans.",
                 options: [
-                    { type: 'image', label: 'Studio', image: 'img/studio-logo.png' },
-                    { type: 'image', label: '1 Bedroom', image: 'img/1bd-logo.png' },
-                    { type: 'image', label: '2 Bedrooms', image: 'img/2bd-logo.png' },
-                    { type: 'image', label: '3 Bedrooms', image: 'img/3bd-logo.png' },
+                    { type: 'pill', label: 'Request Appointment' },
+                    { type: 'pill', label: 'Availability' }
                 ],
-                nextStep: 'budget'
+                nextStep: 'appointment'
             },
-            budget: {
-                message: "And how much are you willing to spend each month?",
-                dynamicOptions: {
-                    'Studio': [
-                        { type: 'pill', label: 'Starting at $1915' },
-                        { type: 'pill', label: 'Starting at $2145' },
-                        { type: 'pill', label: 'Any' }
-                    ],
-                    '1 Bedroom': [
-                        { type: 'pill', label: 'Starting at $2415' },
-                        { type: 'pill', label: 'Starting at $2845 (Unavailable)' },
-                        { type: 'pill', label: 'Any' }
-                    ],
-                    '2 Bedrooms': [
-                        { type: 'pill', label: 'Starting at $2695' },
-                        { type: 'pill', label: 'Starting at $3115' },
-                        { type: 'pill', label: 'Any' }
-                    ],
-                    '3 Bedrooms': [
-                        { type: 'pill', label: 'Starting at $3275' },
-                        { type: 'pill', label: 'Starting at $3715' },
-                        { type: 'pill', label: 'Any' }
-                    ]
-                },
-                nextStep: 'moveIn'
-            },
-            moveIn: {
-                message: "When are you thinking of moving in?",
+            appointment: {
+                message: "How would you like to be contacted?",
                 options: [
-                    { type: 'pill', label: 'ASAP' },
-                    { type: 'pill', label: 'Next 30 Days' },
-                    { type: 'pill', label: 'Next 60 Days' },
-                    { type: 'pill', label: 'Next 90 Days' }
+                    { type: 'pill', label: 'Phone' },
+                    { type: 'pill', label: 'Email' }
                 ],
-                nextStep: 'availability'
+                nextStep: 'contactDetails'
             },
-            availability: {
-                message: "Available Options:",
-                options: null
+            phoneFlow: {
+                message: "Please give me your first and last name.",
+                nextStep: 'phoneNumber'
+            },
+            phoneNumber: {
+                message: "What is your cell phone number?",
+                nextStep: 'reasonForContact'
+            },
+            reasonForContact: {
+                message: "To better assist you, please let me know why you would like to be contacted, or if you’d like to book an appointment when a team member reaches out.",
+                nextStep: 'thankYouPhone'
+            },
+            thankYouPhone: {
+                message: "Thank you for your interest in our property. A team member will give you a call shortly.",
+                nextStep: 'end'
+            },
+            emailFlow: {
+                message: "Please give me your first and last name.",
+                nextStep: 'emailAddress'
+            },
+            emailAddress: {
+                message: "What is your email address?",
+                nextStep: 'reasonForContact'
+            },
+            thankYouEmail: {
+                message: "Thank you for your interest in our property. A team member will reach out to you by email shortly.",
+                nextStep: 'end'
             }
         };
 
         let currentStep = 'welcome';
-        let selectedBedroom = null;
-        let selectedBudget = null;
-        let selectedMoveIn = null;
+        let contactMethod = null;
+        let name = null;
+        let phone = null;
+        let email = null;
+        let reason = null;
 
         function addMessage(message, type = 'bot') {
             const messageElement = document.createElement('div');
             messageElement.classList.add('message', `${type}-message`);
 
-            // Handle potential HTML content
             if (typeof message === 'string') {
                 messageElement.textContent = message;
             } else {
@@ -497,8 +513,6 @@
             }
 
             messagesContainer.appendChild(messageElement);
-
-            // Ensure scroll to bottom
             scrollToBottom();
         }
 
@@ -507,11 +521,8 @@
             if (optionsContainer) optionsContainer.remove();
         }
 
-        function renderOptions(options, optionType = 'image') {
-            // Always clear existing options first
+        function renderOptions(options, optionType = 'pill') {
             clearOptions();
-
-            // If no options, exit early
             if (!options || options.length === 0) return;
 
             const optionsContainer = document.createElement('div');
@@ -521,216 +532,115 @@
                 const optionElement = document.createElement('div');
                 optionElement.classList.add(option.type === 'image' ? 'image-option' : 'pill-option');
 
-                if (option.type === 'image') {
-                    const img = document.createElement('img');
-                    img.src = option.image;
-                    img.alt = option.label;
-                    img.onerror = () => {
-                        console.warn(`Failed to load image: ${option.image}`);
-                        img.style.display = 'none';
-                    };
-                    optionElement.appendChild(img);
-
-                    // Uncomment if you want to add label back
-                    //const label = document.createElement('span');
-                    //label.textContent = option.label;
-                    //optionElement.appendChild(label);
-                } else {
-                    optionElement.textContent = option.label;
-                }
-
+                optionElement.textContent = option.label;
                 optionElement.addEventListener('click', () => handleOptionClick(option));
                 optionsContainer.appendChild(optionElement);
             });
 
             messagesContainer.appendChild(optionsContainer);
-
-            // Scroll to bottom
             scrollToBottom();
         }
 
         function scrollToBottom() {
-            // Slight delay to ensure DOM updates
             setTimeout(() => {
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
             }, 50);
         }
 
-
-        // Close button functionality
         closeBtn.addEventListener('click', () => {
             chatbotWindow.style.display = 'none';
             messagesContainer.innerHTML = '';
             messagesContainer.scrollTop = 0;
             currentStep = 'welcome';
-            selectedBedroom = null;
-            selectedBudget = null;
-            selectedMoveIn = null;
         });
 
-        // Expose function to open chatbot from external widget
-        window.openChatbot = function () {
+        openPricingSpecialsChat = function () {
             chatbotWindow.style.display = 'flex';
-            messagesContainer.innerHTML = ''; // Clear any previous messages
+            messagesContainer.innerHTML = '';
             currentStep = 'welcome';
 
-            // Add welcome message
-            addMessage(conversationFlow.welcome.message);
-
-            widget.classList.remove('active');
-            // Render welcome options after a short delay
-            setTimeout(() => {
-                renderOptions(conversationFlow.welcome.options);
-            }, 100);
-        }
-
-        // Example of property listings, could be fetched from a database or API
-        const propertyListings = [
-            {
-                price: "$1,915/month",
-                title: "S1",
-                beds: "1",
-                baths: "1",
-                sqft: "390",
-                address: "123 Main St, Downtown",
-                type: "Studio",
-                image: "img/studio-logo.png"
-            },
-            {
-                price: "$2,145/month",
-                title: "S3",
-                beds: "1",
-                baths: "1",
-                sqft: "464",
-                address: "456 High St, Downtown",
-                type: "Studio",
-                image: "https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyaminmellish-186077.jpg&fm=jpg"
-            },
-            {
-                price: "$2,415/month",
-                title: "A1",
-                beds: "1",
-                baths: "1",
-                sqft: "624",
-                address: "789 Oak St, Downtown",
-                type: "1 Bedroom",
-                image: "https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyaminmellish-186077.jpg&fm=jpg"
-            },
-            {
-                price: "$2,300/month",
-                title: "Luxury Penthouse Suite",
-                beds: "3",
-                baths: "2",
-                sqft: "1600",
-                address: "101 Maple St, Downtown",
-                type: "3 Bedrooms",
-                image: "https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyaminmellish-186077.jpg&fm=jpg"
-            },
-            {
-                price: "$1,750/month",
-                title: "Affordable City Apartment",
-                beds: "1",
-                baths: "1",
-                sqft: "450",
-                address: "202 Pine St, Downtown",
-                type: "Studio",
-                image: "https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyaminmellish-186077.jpg&fm=jpg"
-            }
-        ];
-
-        // Function to filter properties based on user's selection
-        function filterProperties(bedroomType, budget) {
-            return propertyListings.filter(property => {
-                const price = parseInt(property.price.replace(/[^\d]/g, ''), 10);
-                const maxBudget = parseInt(budget.replace(/[^\d]/g, ''), 10);
-
-                // Return properties that match bedroom type and price range
-                return property.type === bedroomType && price <= maxBudget;
-            });
-        }
-
-        function generateCard(property) {
-            const card = document.createElement('div');
-            card.classList.add('property-card');
-
-            card.innerHTML = `
-                <div class="property-image">
-                            <img src="${property.image}" alt="Property Image" style="width: 100%; height: 100%; object-fit: cover;">
-                        </div>
-                        <div class="property-content">
-                            <div class="property-price">${property.price}</div>
-                            <div class="property-details">${property.title}</div>
-                            <div class="property-features">
-                                <span>${property.beds} Beds</span>
-                                <span>${property.baths} Baths</span>
-                                <span>${property.sqft} sq.ft</span>
-                            </div>
-                            <div class="property-details">${property.address}</div>
-                            <button class="see-details-btn">See Details</button>
-                        </div>
-            `;
-
-            // Add the card to the container
-            messagesContainer.appendChild(card);
-
-            // Add event listener for the "See Details" button
-            const seeDetailsButton = card.querySelector('.see-details-btn');
-            seeDetailsButton.addEventListener('click', () => {
-                alert('Redirecting to details page...');
-            });
-
-            // Scroll to the bottom of the container
-            scrollToBottom();
-        }
-
+            addMessage(pricingSpecialsFlow.welcome.message);
+            renderOptions(pricingSpecialsFlow.welcome.options);
+        };
 
         function handleOptionClick(option) {
             switch (currentStep) {
                 case 'welcome':
-                    selectedBedroom = option.label;
-                    addMessage(option.label, 'user');
-                    setTimeout(() => {
-                        addMessage(conversationFlow.budget.message);
-                        renderOptions(
-                            conversationFlow.budget.dynamicOptions[selectedBedroom],
-                            'pill'
-                        );
-                        currentStep = 'budget';
-                    }, 1000);
+                    if (option.label === 'Availability') {
+                        openChatbot(); // Reuse the availability flow
+                    } else if (option.label === 'Request Appointment') {
+                        currentStep = 'appointment';
+                        addMessage(pricingSpecialsFlow.appointment.message);
+                        renderOptions(pricingSpecialsFlow.appointment.options);
+                    }
                     break;
-                case 'budget':
-                    selectedBudget = option.label;
+
+                case 'appointment':
+                    contactMethod = option.label;
+                    addMessage(option.label, 'user');
+                    if (contactMethod === 'Phone') {
+                        currentStep = 'phoneFlow';
+                        addMessage(pricingSpecialsFlow.phoneFlow.message);
+                    } else {
+                        currentStep = 'emailFlow';
+                        addMessage(pricingSpecialsFlow.emailFlow.message);
+                    }
+                    break;
+
+                case 'phoneFlow':
+                    name = option.label;
                     addMessage(option.label, 'user');
                     setTimeout(() => {
-                        addMessage(conversationFlow.moveIn.message);
-                        renderOptions(conversationFlow.moveIn.options, 'pill');
-                        currentStep = 'moveIn';
+                        addMessage(pricingSpecialsFlow.phoneNumber.message);
+                        currentStep = 'phoneNumber';
                     }, 1000);
                     break;
 
-                case 'moveIn':
-                    selectedMoveIn = option.label;
+                case 'phoneNumber':
+                    phone = option.label;
                     addMessage(option.label, 'user');
                     setTimeout(() => {
-                        addMessage(conversationFlow.availability.message);
-                        clearOptions();
-                        // Filter properties based on selected bedroom type and budget
-                        const filteredProperties = filterProperties(selectedBedroom, selectedBudget);
-
-                        // If properties exist, generate cards
-                        if (filteredProperties.length > 0) {
-                            filteredProperties.forEach(property => {
-                                generateCard(property);
-                            });
-                        } else {
-                            addMessage("Sorry, no properties match your selection.");
-                        }
-                        currentStep = 'availability';
+                        addMessage(pricingSpecialsFlow.reasonForContact.message);
+                        currentStep = 'reasonForContact';
                     }, 1000);
+                    break;
+
+                case 'reasonForContact':
+                    reason = option.label;
+                    addMessage(option.label, 'user');
+                    setTimeout(() => {
+                        addMessage(pricingSpecialsFlow.thankYouPhone.message);
+                        currentStep = 'thankYouPhone';
+                    }, 1000);
+                    break;
+
+                case 'thankYouPhone':
+                    currentStep = 'end';
+                    break;
+
+                case 'emailFlow':
+                    name = option.label;
+                    addMessage(option.label, 'user');
+                    setTimeout(() => {
+                        addMessage(pricingSpecialsFlow.emailAddress.message);
+                        currentStep = 'emailAddress';
+                    }, 1000);
+                    break;
+
+                case 'emailAddress':
+                    email = option.label;
+                    addMessage(option.label, 'user');
+                    setTimeout(() => {
+                        addMessage(pricingSpecialsFlow.reasonForContact.message);
+                        currentStep = 'reasonForContact';
+                    }, 1000);
+                    break;
+
+                case 'thankYouEmail':
+                    currentStep = 'end';
                     break;
             }
         }
-
     </script>
 </body>
 

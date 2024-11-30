@@ -16,7 +16,7 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
-            z-index: 1000;
+            z-index: 10;
         }
 
         .main-button {
@@ -300,14 +300,14 @@
             border-top-left-radius: 8px;
             border-top-right-radius: 8px;
         }
-        
+
         .property-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             transition: transform 0.2s ease;
         }
-        
+
         .property-content {
             padding: 12px;
             background-color: #ffffff;
@@ -315,57 +315,137 @@
             border-bottom-right-radius: 8px;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
         }
-        
+
         .property-price {
-            font-size: 1.2rem;
+            font-size: 1.4rem;
+            /* Increased price font size */
             font-weight: 700;
             color: #2c3e50;
             margin-bottom: 8px;
         }
-        
+
         .property-details {
             color: #7f8c8d;
-            font-size: 0.9rem;
+            font-size: 1rem;
+            /* Increased details font size */
             margin-bottom: 8px;
         }
-        
+
         .property-features {
             display: flex;
             justify-content: space-between;
             align-items: center;
             background-color: #f5f5f5;
             border-radius: 4px;
-            padding: 10px;
-            font-size: 0.9rem;
+            padding: 12px;
+            font-size: 1rem;
+            /* Increased font size for features */
             color: #555;
-          }
-          
-          .property-features span {
+        }
+
+        .property-features span {
             display: flex;
             align-items: center;
-            gap: 6px;
-          }
-          
-          .property-features span i {
-            font-size: 1.1rem;
+            gap: 10px;
+            /* Increased gap between icon and number */
+            font-size: 1.2rem;
+            /* Increased font size for feature text */
+        }
+
+        .property-features span i {
+            font-size: 1.5rem;
+            /* Increased icon size */
             color: #3498db;
-          }
-        
+        }
+
+        .property-features span img {
+            width: 18px;
+            /* Icon size for beds and baths */
+            height: 18px;
+        }
+
+        .property-features span.beds,
+        .property-features span.baths {
+            font-size: 1.2rem;
+            /* Increased font size for bed and bath numbers */
+        }
+
         .see-details-btn {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
+            /* Increased padding for the button */
             background-color: #3498db;
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 1rem;
+            /* Increased button font size */
             font-weight: 600;
             text-transform: uppercase;
             transition: background-color 0.2s ease;
         }
-        
+
         .see-details-btn:hover {
+            background-color: #2980b9;
+        }
+
+        /* Container for the form */
+        .form-container {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-height: 100%;
+            overflow-y: auto;
+            background-color: white;
+        }
+
+        /* General form styling */
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* Styling for individual form fields */
+        .form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .form-field label {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .form-field input,
+        .form-field textarea {
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid #3498db;
+            font-size: 14px;
+        }
+
+        .form-field textarea {
+            resize: none;
+            /* Prevent resizing */
+        }
+
+        /* Styling for the submit button */
+        .submit-btn {
+            padding: 10px 15px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit-btn:hover {
             background-color: #2980b9;
         }
     </style>
@@ -381,20 +461,20 @@
     </div>
     <div class="chatbot-widget">
         <div class="options-container">
-            <div class="option" onclick="window.openChatbot()">
+            <div class="option" onclick="openChatbot()">
                 <div class="option-icon">
                     <img width="24" height="24" src="https://img.icons8.com/emoji/24/check-mark-emoji.png"
                         alt="check-mark-emoji" />
                 </div>
                 Check Availability
             </div>
-            <div class="option">
+            <div class="option" onclick="handlePricingSpecials()">
                 <div class="option-icon">
                     <img width="24" height="24" src="https://img.icons8.com/office/24/tags.png" alt="tags" />
                 </div>
                 Pricing & Specials
             </div>
-            <div class="option">
+            <div class="option" onclick="handleBook()">
                 <div class="option-icon">
                     <img width="24" height="24"
                         src="https://img.icons8.com/external-xnimrodx-blue-xnimrodx/24/external-signboard-city-scape-xnimrodx-blue-xnimrodx.png"
@@ -403,7 +483,7 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;Book a Tour&nbsp;&nbsp;&nbsp;&nbsp;
             </div>
         </div>
-        <div class="main-button">
+        <div class="main-button" onclick="main()">
             <img src="chatbot-logo.png" alt="Chat Menu">
         </div>
     </div>
@@ -412,15 +492,10 @@
         const widget = document.querySelector('.chatbot-widget');
         const mainButton = widget.querySelector('.main-button');
 
-        mainButton.addEventListener('click', function () {
-            widget.classList.toggle('active');
-        });
+        widget.classList.toggle('active');
 
-        // Optional: Close when clicking outside
-        document.addEventListener('click', function (event) {
-            if (!widget.contains(event.target)) {
-                widget.classList.remove('active');
-            }
+        mainButton.addEventListener('click', function () {
+
         });
 
         const chatbotWindow = document.querySelector('.chatbot-window');
@@ -475,9 +550,35 @@
                 nextStep: 'availability'
             },
             availability: {
-                message: "Available Options:",
+                message: null,
                 options: null
+            },
+
+            booking: {
+                message: "Please enter the following details",
+                options: [
+                    { type: 'pill', label: 'Email' },
+                    { type: 'pill', label: 'Phone' }
+                ]
+            },
+
+            pricing: {
+                message: "Enjoy Up to 15% Off Pre-sales On Select Floorplans.",
+                options: [
+                    { type: 'pill', label: 'Request Appointment' },
+                    { type: 'pill', label: 'Availability' }
+                ]
+            },
+
+            appointment: {
+                message: "How would you like to be contacted?",
+                options: [
+                    { type: 'pill', label: 'Email' },
+                    { type: 'pill', label: 'Phone' }
+                ]
             }
+
+
         };
 
         let currentStep = 'welcome';
@@ -486,6 +587,9 @@
         let selectedMoveIn = null;
 
         function addMessage(message, type = 'bot') {
+            if (type == 'user') {
+                clearOptions();
+            }
             const messageElement = document.createElement('div');
             messageElement.classList.add('message', `${type}-message`);
 
@@ -496,7 +600,9 @@
                 messageElement.innerHTML = message;
             }
 
-            messagesContainer.appendChild(messageElement);
+            setTimeout(() => {
+                messagesContainer.appendChild(messageElement);
+            }, 200);
 
             // Ensure scroll to bottom
             scrollToBottom();
@@ -543,7 +649,9 @@
                 optionsContainer.appendChild(optionElement);
             });
 
-            messagesContainer.appendChild(optionsContainer);
+            setTimeout(() => {
+                messagesContainer.appendChild(optionsContainer);
+            }, 300);
 
             // Scroll to bottom
             scrollToBottom();
@@ -569,7 +677,7 @@
         });
 
         // Expose function to open chatbot from external widget
-        window.openChatbot = function () {
+        openChatbot = function () {
             chatbotWindow.style.display = 'flex';
             messagesContainer.innerHTML = ''; // Clear any previous messages
             currentStep = 'welcome';
@@ -577,12 +685,60 @@
             // Add welcome message
             addMessage(conversationFlow.welcome.message);
 
-            widget.classList.remove('active');
             // Render welcome options after a short delay
             setTimeout(() => {
                 renderOptions(conversationFlow.welcome.options);
             }, 100);
         }
+
+        handlePricingSpecials = function () {
+            try {
+                chatbotWindow.removeChild(formContainer);
+            } catch (e) { }
+            chatbotWindow.style.display = 'flex';
+            messagesContainer.innerHTML = ''; // Clear any previous messages
+            currentStep = 'pricing';
+
+            addMessage(conversationFlow.pricing.message);
+
+            // Render welcome options after a short delay
+            setTimeout(() => {
+                renderOptions(conversationFlow.pricing.options);
+            }, 100);
+        }
+
+        handleBook = function () {
+            try {
+                chatbotWindow.removeChild(formContainer);
+            } catch (e) { }
+            chatbotWindow.style.display = 'flex';
+            messagesContainer.innerHTML = ''; // Clear any previous messages
+            currentStep = 'booking';
+
+            addMessage(conversationFlow.booking.message);
+
+            // Render welcome options after a short delay
+            setTimeout(() => {
+                renderOptions(conversationFlow.booking.options);
+            }, 100);
+        }
+
+        main = function () {
+            try {
+                chatbotWindow.removeChild(formContainer);
+            } catch (e) { }
+            chatbotWindow.style.display = 'flex';
+            messagesContainer.innerHTML = ''; // Clear any previous messages
+            currentStep = 'main';
+
+            addMessage(conversationFlow.booking.message);
+
+            // Render welcome options after a short delay
+            setTimeout(() => {
+                renderOptions(conversationFlow.booking.options);
+            }, 100);
+        }
+
 
         // Example of property listings, could be fetched from a database or API
         const propertyListings = [
@@ -655,19 +811,27 @@
 
             card.innerHTML = `
                 <div class="property-image">
-                            <img src="${property.image}" alt="Property Image" style="width: 100%; height: 100%; object-fit: cover;">
-                        </div>
-                        <div class="property-content">
-                            <div class="property-price">${property.price}</div>
-                            <div class="property-details">${property.title}</div>
-                            <div class="property-features">
-                                <span>${property.beds} Beds</span>
-                                <span>${property.baths} Baths</span>
-                                <span>${property.sqft} sq.ft</span>
-                            </div>
-                            <div class="property-details">${property.address}</div>
-                            <button class="see-details-btn">See Details</button>
-                        </div>
+                    <img src="${property.image}" alt="Property Image" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <div class="property-content">
+                    <div class="property-price">${property.price}</div>
+                    <div class="property-details">${property.title}</div>
+                    <div class="property-features">
+                        <span class="feature">
+                            <img src="https://img.icons8.com/?size=100&id=LuG23LXvoO4t&format=png&color=000000" alt="Bed Icon" class="feature-icon"> ${property.beds} Beds
+                        </span>
+                        <span class="feature">
+                            <img src="https://img.icons8.com/?size=100&id=11485&format=png&color=000000" alt="Bath Icon" class="feature-icon"> ${property.baths} Baths
+                        </span>
+                        <span class="feature">
+                            <img src="https://img.icons8.com/?size=100&id=1408&format=png&color=000000" alt="Area Icon" class="feature-icon">
+                            ${property.sqft} sq.ft
+                        </span>
+                    </div>
+                    <div class="property-details">${property.address}</div>
+                    <button class="see-details-btn">See Details</button>
+                </div>
+                
             `;
 
             // Add the card to the container
@@ -680,6 +844,224 @@
             });
 
             // Scroll to the bottom of the container
+            scrollToBottom();
+        }
+
+        function CalenderEmailForm() {
+            const formContainer = document.createElement('div');
+            formContainer.classList.add('form-container');
+
+            formContainer.innerHTML = `
+                <form class="contact-form">
+                    <div class="form-field">
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="name" required placeholder="Enter your name" />
+                    </div>
+                    <div class="form-field">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required placeholder="Enter your email" />
+                    </div>
+                    <div class="form-field">
+                        <label for="date">Preferred Contact Date:</label>
+                        <input type="date" id="date" name="date" required />
+                    </div>
+                    <div class="form-field">
+                        <label for="description">Why would you like to be contacted?</label>
+                        <textarea id="description" name="description" required placeholder="Enter your message" style="height: 150px;"></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Submit</button>
+                </form>
+            `;
+
+            // Add the form to the chatbot window
+            const chatbotWindow = document.querySelector('.chatbot-window');
+            chatbotWindow.appendChild(formContainer);
+
+            // Add event listener for the form submission
+            const form = formContainer.querySelector('.contact-form');
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                // Collect form data
+                const formData = {
+                    name: form.querySelector('#name').value,
+                    email: form.querySelector('#email').value,
+                    date: form.querySelector('#date').value,
+                    description: form.querySelector('#description').value
+                };
+
+                // Log form data as JSON
+                console.log(JSON.stringify(formData));
+
+                chatbotWindow.removeChild(formContainer);
+
+                addMessage('Thank you message: Thank you for your interest in our property. A team member will reach out to you by email shortly.');
+
+                // Optionally reset the form after submission
+            });
+
+            // Scroll to the bottom of the chatbot window after form injection
+            scrollToBottom();
+        }
+
+        function CalenderPhoneForm() {
+            const formContainer = document.createElement('div');
+            formContainer.classList.add('form-container');
+
+            formContainer.innerHTML = `
+                <form class="contact-form">
+                    <div class="form-field">
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="name" required placeholder="Enter your name" />
+                    </div>
+                    <div class="form-field">
+                        <label for="phone">Phone:</label>
+                        <input type="text" id="phone" name="Phone" required placeholder="Enter your Phone Number" />
+                    </div>
+                    <div class="form-field">
+                        <label for="date">Preferred Contact Date:</label>
+                        <input type="date" id="date" name="date" required />
+                    </div>
+                    <div class="form-field">
+                        <label for="description">Why would you like to be contacted?</label>
+                        <textarea id="description" name="description" required placeholder="Enter your message" style="height: 150px;"></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Submit</button>
+                </form>
+            `;
+
+            // Add the form to the chatbot window
+            const chatbotWindow = document.querySelector('.chatbot-window');
+            chatbotWindow.appendChild(formContainer);
+
+            // Add event listener for the form submission
+            const form = formContainer.querySelector('.contact-form');
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                // Collect form data
+                const formData = {
+                    name: form.querySelector('#name').value,
+                    email: form.querySelector('#email').value,
+                    date: form.querySelector('#date').value,
+                    description: form.querySelector('#description').value
+                };
+
+                // Log form data as JSON
+                console.log(JSON.stringify(formData));
+
+                chatbotWindow.removeChild(formContainer);
+
+                addMessage('Thank you message: Thank you for your interest in our property. A team member will reach out to you by email shortly.');
+
+                // Optionally reset the form after submission
+            });
+
+            // Scroll to the bottom of the chatbot window after form injection
+            scrollToBottom();
+        }
+
+        function EmailForm() {
+            const formContainer = document.createElement('div');
+            formContainer.classList.add('form-container');
+
+            formContainer.innerHTML = `
+                <form class="contact-form">
+                    <div class="form-field">
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="name" required placeholder="Enter your name" />
+                    </div>
+                    <div class="form-field">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required placeholder="Enter your email" />
+                    </div>
+                    <div class="form-field">
+                        <label for="description">Why would you like to be contacted?</label>
+                        <textarea id="description" name="description" required placeholder="Enter your message" style="height: 150px;"></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Submit</button>
+                </form>
+            `;
+
+            // Add the form to the chatbot window
+            const chatbotWindow = document.querySelector('.chatbot-window');
+            chatbotWindow.appendChild(formContainer);
+
+            // Add event listener for the form submission
+            const form = formContainer.querySelector('.contact-form');
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                // Collect form data
+                const formData = {
+                    name: form.querySelector('#name').value,
+                    email: form.querySelector('#email').value,
+                    description: form.querySelector('#description').value
+                };
+
+                // Log form data as JSON
+                console.log(JSON.stringify(formData));
+
+                chatbotWindow.removeChild(formContainer);
+
+                addMessage('Thank you message: Thank you for your interest in our property. A team member will reach out to you by email shortly.')
+
+                // Optionally reset the form after submission
+            });
+
+            // Scroll to the bottom of the chatbot window after form injection
+            scrollToBottom();
+        }
+
+        function PhoneForm() {
+            const formContainer = document.createElement('div');
+            formContainer.classList.add('form-container');
+
+            formContainer.innerHTML = `
+                <form class="contact-form">
+                    <div class="form-field">
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="name" required placeholder="Enter your name" />
+                    </div>
+                    <div class="form-field">
+                        <label for="phone">Phone:</label>
+                        <input type="text" id="phone" name="Phone" required placeholder="Enter your Phone Number" />
+                    </div>
+                    <div class="form-field">
+                        <label for="description">Why would you like to be contacted?</label>
+                        <textarea id="description" name="description" required placeholder="Enter your message" style="height: 150px;"></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Submit</button>
+                </form>
+            `;
+
+            // Add the form to the chatbot window
+            const chatbotWindow = document.querySelector('.chatbot-window');
+            chatbotWindow.appendChild(formContainer);
+
+            // Add event listener for the form submission
+            const form = formContainer.querySelector('.contact-form');
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                // Collect form data
+                const formData = {
+                    name: form.querySelector('#name').value,
+                    email: form.querySelector('#phone').value,
+                    description: form.querySelector('#description').value
+                };
+
+                // Log form data as JSON
+                console.log(JSON.stringify(formData));
+
+                chatbotWindow.removeChild(formContainer);
+
+                addMessage('Thank you message: Thank you for your interest in our property. A team member will call you shortly.')
+
+                // Optionally reset the form after submission
+            });
+
+            // Scroll to the bottom of the chatbot window after form injection
             scrollToBottom();
         }
 
@@ -696,7 +1078,7 @@
                             'pill'
                         );
                         currentStep = 'budget';
-                    }, 500);
+                    }, 1000);
                     break;
                 case 'budget':
                     selectedBudget = option.label;
@@ -705,7 +1087,7 @@
                         addMessage(conversationFlow.moveIn.message);
                         renderOptions(conversationFlow.moveIn.options, 'pill');
                         currentStep = 'moveIn';
-                    }, 500);
+                    }, 1000);
                     break;
 
                 case 'moveIn':
@@ -726,8 +1108,47 @@
                             addMessage("Sorry, no properties match your selection.");
                         }
                         currentStep = 'availability';
-                    }, 500);
+                    }, 1000);
                     break;
+
+                case 'pricing':
+                    if (option.label == 'Availability') {
+                        openChatbot();
+                    }
+                    else {
+                        addMessage(option.label, 'user');
+                        setTimeout(() => {
+                            addMessage(conversationFlow.appointment.message);
+                            renderOptions(conversationFlow.appointment.options, 'pill');
+                            currentStep = 'appointment';
+                        }, 1000);
+                        break;
+                    }
+
+                case 'appointment':
+                    addMessage(option.label, 'user');
+                    if (option.label == 'Email') {
+                        clearOptions()
+                        EmailForm()
+                    }
+                    else {
+                        clearOptions()
+                        PhoneForm()
+                    }
+                    break;
+
+                case 'booking':
+                    addMessage(option.label, 'user');
+                    if (option.label == 'Email') {
+                        clearOptions()
+                        CalenderEmailForm()
+                    }
+                    else {
+                        clearOptions()
+                        CalenderPhoneForm()
+                    }
+                    break;
+
             }
         }
 
