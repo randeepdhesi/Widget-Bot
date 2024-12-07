@@ -40,7 +40,7 @@
             </div>
         </div>
         <div class="main-button" onclick="main()">
-            <img src="img/chatbot-logo.png" alt="Chat Menu">
+            <img src="icons for chatbot/chatbot-logo.png" alt="Chat Menu">
         </div>
     </div>
 
@@ -62,10 +62,10 @@
             welcome: {
                 message: "Well hello there! How can I help you?",
                 options: [
-                    { type: 'image', label: 'Studio', image: 'img/studio-logo.png' },
-                    { type: 'image', label: '1 Bedroom', image: 'img/1bd-logo.png' },
-                    { type: 'image', label: '2 Bedrooms', image: 'img/2bd-logo.png' },
-                    { type: 'image', label: '3 Bedrooms', image: 'img/3bd-logo.png' },
+                    { type: 'image', label: 'Studio', image: 'icons for chatbot/1.png' },
+                    { type: 'image', label: '1 Bedroom', image: 'icons for chatbot/3.png' },
+                    { type: 'image', label: '2 Bedrooms', image: 'icons for chatbot/5.png' },
+                    { type: 'image', label: '3 Bedrooms', image: 'icons for chatbot/8.png' },
                 ],
                 nextStep: 'budget'
             },
@@ -137,6 +137,7 @@
             main: {
                 message: "Well hello there! How can I help you?",
                 options: [
+                    { type: 'pill', label: 'Photos' },
                     { type: 'pill', label: 'Pet Policy' },
                     { type: 'pill', label: 'Amenities' },
                     { type: 'pill', label: 'Neighbourhood' },
@@ -195,6 +196,7 @@
                 optionElement.classList.add(option.type === 'image' ? 'image-option' : 'pill-option');
 
                 if (option.type === 'image') {
+                    optionsContainer.id = 'image-option';
                     const img = document.createElement('img');
                     img.src = option.image;
                     img.alt = option.label;
@@ -234,6 +236,10 @@
 
         // Close button functionality
         closeBtn.addEventListener('click', () => {
+            try {
+                inputContainer = document.querySelector('.input-container');
+                chatbotWindow.removeChild(inputContainer);
+            } catch (e) { }
             chatbotWindow.style.display = 'none';
             messagesContainer.innerHTML = '';
             messagesContainer.scrollTop = 0;
@@ -246,8 +252,8 @@
         // Expose function to open chatbot from external widget
         openChatbot = function () {
             try {
-                formContainer = document.querySelector('.form-container');
-                chatbotWindow.removeChild(formContainer);
+                inputContainer = document.querySelector('.input-container');
+                chatbotWindow.removeChild(inputContainer);
             } catch (e) { }
             chatbotWindow.style.display = 'flex';
             messagesContainer.innerHTML = ''; // Clear any previous messages
@@ -264,8 +270,8 @@
 
         handlePricingSpecials = function () {
             try {
-                formContainer = document.querySelector('.form-container');
-                chatbotWindow.removeChild(formContainer);
+                inputContainer = document.querySelector('.input-container');
+                chatbotWindow.removeChild(inputContainer);
             } catch (e) { }
             chatbotWindow.style.display = 'flex';
             messagesContainer.innerHTML = ''; // Clear any previous messages
@@ -281,8 +287,8 @@
 
         handleBook = function () {
             try {
-                formContainer = document.querySelector('.form-container');
-                chatbotWindow.removeChild(formContainer);
+                inputContainer = document.querySelector('.input-container');
+                chatbotWindow.removeChild(inputContainer);
             } catch (e) { }
             chatbotWindow.style.display = 'flex';
             messagesContainer.innerHTML = ''; // Clear any previous messages
@@ -298,8 +304,8 @@
 
         main = function () {
             try {
-                formContainer = document.querySelector('.form-container');
-                chatbotWindow.removeChild(formContainer);
+                inputContainer = document.querySelector('.input-container');
+                chatbotWindow.removeChild(inputContainer);
             } catch (e) { }
             chatbotWindow.style.display = 'flex';
             messagesContainer.innerHTML = ''; // Clear any previous messages
@@ -307,14 +313,10 @@
 
             addMessage(conversationFlow.main.message);
 
-            setTimeout(() => {
-                Carousel();
-            }, 300);
-
             // Render welcome options after a short delay
             setTimeout(() => {
                 renderOptions(conversationFlow.main.options);
-            }, 400);
+            }, 100);
         }
 
 
@@ -328,7 +330,7 @@
                 sqft: "390",
                 address: "123 Main St, Downtown",
                 type: "Studio",
-                image: "https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyaminmellish-186077.jpg&fm=jpg"
+                image: "properties_photos/1.png"
             },
             {
                 price: "$2,145/month",
@@ -338,7 +340,7 @@
                 sqft: "464",
                 address: "456 High St, Downtown",
                 type: "Studio",
-                image: "https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyaminmellish-186077.jpg&fm=jpg"
+                image: "properties_photos/2.png"
             },
             {
                 price: "$2,415/month",
@@ -348,27 +350,47 @@
                 sqft: "624",
                 address: "789 Oak St, Downtown",
                 type: "1 Bedroom",
-                image: "https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyaminmellish-186077.jpg&fm=jpg"
+                image: "properties_photos/3.png"
             },
             {
-                price: "$2,300/month",
-                title: "Luxury Penthouse Suite",
+                price: "$2,695/month",
+                title: "J1",
+                beds: "2",
+                baths: "1",
+                sqft: "709",
+                address: "101 Maple St, Downtown",
+                type: "2 Bedrooms",
+                image: "properties_photos/4.png"
+            },
+            {
+                price: "$3,115/month",
+                title: "J7",
+                beds: "2",
+                baths: "2",
+                sqft: "840",
+                address: "202 Pine St, Downtown",
+                type: "2 Bedrooms",
+                image: "properties_photos/5.png"
+            },
+            {
+                price: "$3,275/month",
+                title: "R3",
                 beds: "3",
                 baths: "2",
-                sqft: "1600",
-                address: "101 Maple St, Downtown",
+                sqft: "960",
+                address: "202 Pine St, Downtown",
                 type: "3 Bedrooms",
-                image: "https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyaminmellish-186077.jpg&fm=jpg"
+                image: "properties_photos/6.png"
             },
             {
-                price: "$1,750/month",
-                title: "Affordable City Apartment",
-                beds: "1",
-                baths: "1",
-                sqft: "450",
+                price: "$3,715/month",
+                title: "R8",
+                beds: "3",
+                baths: "2",
+                sqft: "973",
                 address: "202 Pine St, Downtown",
-                type: "Studio",
-                image: "https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyaminmellish-186077.jpg&fm=jpg"
+                type: "3 Bedrooms",
+                image: "properties_photos/7.png"
             }
         ];
 
@@ -392,21 +414,6 @@
                     <img src="${property.image}" alt="Property Image" style="width: 100%; height: 100%; object-fit: cover;">
                 </div>
                 <div class="property-content">
-                    <div class="property-price">${property.price}</div>
-                    <div class="property-details">${property.title}</div>
-                    <div class="property-features">
-                        <span class="feature">
-                            <img src="https://img.icons8.com/?size=100&id=LuG23LXvoO4t&format=png&color=000000" alt="Bed Icon" class="feature-icon"> ${property.beds} Beds
-                        </span>
-                        <span class="feature">
-                            <img src="https://img.icons8.com/?size=100&id=11485&format=png&color=000000" alt="Bath Icon" class="feature-icon"> ${property.baths} Baths
-                        </span>
-                        <span class="feature">
-                            <img src="https://img.icons8.com/?size=100&id=1408&format=png&color=000000" alt="Area Icon" class="feature-icon">
-                            ${property.sqft} sq.ft
-                        </span>
-                    </div>
-                    <div class="property-details">${property.address}</div>
                     <button class="see-details-btn">See Details</button>
                 </div>
                 
@@ -433,19 +440,21 @@
             carouselContainer.innerHTML = `
                 <div class="carousel">
                     <div class="carousel-track">
-                        <div class="carousel-slide"><img src="img/1.png" alt="Image 1"></div>
-                        <div class="carousel-slide"><img src="img/2.png" alt="Image 2"></div>
-                        <div class="carousel-slide"><img src="img/3.png" alt="Image 3"></div>
-                        <div class="carousel-slide"><img src="img/4.png" alt="Image 4"></div>
-                        <div class="carousel-slide"><img src="img/5.png" alt="Image 5"></div>
-                        <div class="carousel-slide"><img src="img/6.png" alt="Image 6"></div>
+                        <div class="carousel-slide"><img src="properties_photos/8.png" alt="Image 1"></div>
+                        <div class="carousel-slide"><img src="properties_photos/9.png" alt="Image 1"></div>
+                        <div class="carousel-slide"><img src="properties_photos/10.png" alt="Image 1"></div>
+                        <div class="carousel-slide"><img src="properties_photos/11.png" alt="Image 1"></div>
+                        <div class="carousel-slide"><img src="properties_photos/12.png" alt="Image 1"></div>
+                        <div class="carousel-slide"><img src="properties_photos/13.png" alt="Image 1"></div>
                     </div>
                     <button class="carousel-btn carousel-btn-left">&lt;</button>
                     <button class="carousel-btn carousel-btn-right">&gt;</button>
                 </div>
             `;
 
+            //setTimeout(() => {
             messagesContainer.appendChild(carouselContainer);
+            //}, 300);
 
             // Carousel logic
             const track = carouselContainer.querySelector('.carousel-track');
@@ -480,224 +489,107 @@
             });
         }
 
-        function CalenderEmailForm() {
-            const formContainer = document.createElement('div');
-            formContainer.classList.add('form-container');
+        function Form(contact, calender = false) {
+            let questions;
+            if (calender == true) {
+                questions = [
+                    "What is your name?",
+                    `What is your ${contact}?`,
+                    "What is your preferred contact date?",
+                    "To better assist you, please let me know why you would like to be contacted, or if you’d like to book an appointment when a team member reaches out."
+                ];
+            } else {
+                questions = [
+                    "What is your name?",
+                    `What is your ${contact}?`,
+                    "To better assist you, please let me know why you would like to be contacted, or if you’d like to book an appointment when a team member reaches out."
+                ];
+            }
 
-            formContainer.innerHTML = `
-                <form class="contact-form">
-                    <div class="form-field">
-                        <label for="name">Name:</label>
-                        <input type="text" id="name" name="name" required placeholder="Enter your name" />
-                    </div>
-                    <div class="form-field">
-                        <label for="email">Email:</label>
-                        <input type="email" id="email" name="email" required placeholder="Enter your email" />
-                    </div>
-                    <div class="form-field">
-                        <label for="date">Preferred Contact Date:</label>
-                        <input type="date" id="date" name="date" required />
-                    </div>
-                    <div class="form-field">
-                        <label for="description">Why would you like to be contacted?</label>
-                        <textarea id="description" name="description" required placeholder="Enter your message" style="height: 150px;"></textarea>
-                    </div>
-                    <button type="submit" class="submit-btn">Submit</button>
-                </form>
-            `;
+            const answers = {};
+            let currentQuestionIndex = 0;
 
-            // Add the form to the chatbot window
+            const inputField = document.createElement('input');
+            inputField.type = 'text';
+            inputField.placeholder = 'Type your answer here...';
+            inputField.classList.add('chat-input');
+
+            const sendButton = document.createElement('button');
+            sendButton.textContent = 'Send';
+            sendButton.classList.add('send-btn');
+
+            const inputContainer = document.createElement('div');
+            inputContainer.classList.add('input-container');
+            inputContainer.appendChild(inputField);
+            inputContainer.appendChild(sendButton);
+
             const chatbotWindow = document.querySelector('.chatbot-window');
-            chatbotWindow.appendChild(formContainer);
+            chatbotWindow.appendChild(inputContainer);
 
-            // Add event listener for the form submission
-            const form = formContainer.querySelector('.contact-form');
-            form.addEventListener('submit', function (event) {
-                event.preventDefault();
+            const askQuestion = () => {
+                if (currentQuestionIndex < questions.length) {
+                    const question = questions[currentQuestionIndex];
+                    addMessage(question);
 
-                // Collect form data
-                const formData = {
-                    name: form.querySelector('#name').value,
-                    email: form.querySelector('#email').value,
-                    date: form.querySelector('#date').value,
-                    description: form.querySelector('#description').value
-                };
+                    // Adjust input type based on the question
+                    if (question.includes('contact date')) {
+                        inputField.type = 'date';
+                        inputField.placeholder = ''; // No placeholder for date
+                    } else {
+                        inputField.type = 'text';
+                        inputField.placeholder = 'Type your answer here...';
+                    }
 
-                // Log form data as JSON
-                console.log(JSON.stringify(formData));
+                    inputField.value = '';
+                } else {
+                    // All questions answered, handle data submission
+                    chatbotWindow.removeChild(inputContainer);
 
-                chatbotWindow.removeChild(formContainer);
+                    console.log(JSON.stringify(answers)); // Log answers as JSON
 
-                addMessage('Thank you message: Thank you for your interest in our property. A team member will reach out to you by email shortly.');
+                    addMessage(
+                        'Thank you message: Thank you for your interest in our property. A team member will reach out to you shortly.',
+                        'bot'
+                    );
+                }
+            };
 
-                // Optionally reset the form after submission
+            const handleUserResponse = () => {
+                const userAnswer = inputField.value.trim();
+                if (userAnswer || inputField.type === 'date') { // Allow empty value for date picker
+                    // Save the answer and move to the next question
+                    answers[currentQuestionIndex] = userAnswer;
+                    addMessage(userAnswer || 'No date selected', 'user'); // Default text if no date provided
+                    currentQuestionIndex++;
+                    askQuestion();
+                }
+            };
+
+            // Add event listener for the send button
+            sendButton.addEventListener('click', handleUserResponse);
+
+            // Add event listener for the Enter key
+            inputField.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    handleUserResponse();
+                }
             });
 
-            // Scroll to the bottom of the chatbot window after form injection
-            scrollToBottom();
-        }
 
-        function CalenderPhoneForm() {
-            const formContainer = document.createElement('div');
-            formContainer.classList.add('form-container');
 
-            formContainer.innerHTML = `
-                <form class="contact-form">
-                    <div class="form-field">
-                        <label for="name">Name:</label>
-                        <input type="text" id="name" name="name" required placeholder="Enter your name" />
-                    </div>
-                    <div class="form-field">
-                        <label for="phone">Phone:</label>
-                        <input type="text" id="phone" name="Phone" required placeholder="Enter your Phone Number" />
-                    </div>
-                    <div class="form-field">
-                        <label for="date">Preferred Contact Date:</label>
-                        <input type="date" id="date" name="date" required />
-                    </div>
-                    <div class="form-field">
-                        <label for="description">Why would you like to be contacted?</label>
-                        <textarea id="description" name="description" required placeholder="Enter your message" style="height: 150px;"></textarea>
-                    </div>
-                    <button type="submit" class="submit-btn">Submit</button>
-                </form>
-            `;
-
-            // Add the form to the chatbot window
-            const chatbotWindow = document.querySelector('.chatbot-window');
-            chatbotWindow.appendChild(formContainer);
-
-            // Add event listener for the form submission
-            const form = formContainer.querySelector('.contact-form');
-            form.addEventListener('submit', function (event) {
-                event.preventDefault();
-
-                // Collect form data
-                const formData = {
-                    name: form.querySelector('#name').value,
-                    email: form.querySelector('#email').value,
-                    date: form.querySelector('#date').value,
-                    description: form.querySelector('#description').value
-                };
-
-                // Log form data as JSON
-                console.log(JSON.stringify(formData));
-
-                chatbotWindow.removeChild(formContainer);
-
-                addMessage('Thank you message: Thank you for your interest in our property. A team member will reach out to you by email shortly.');
-
-                // Optionally reset the form after submission
+            sendButton.addEventListener('click', () => {
+                const userAnswer = inputField.value.trim();
+                if (userAnswer) {
+                    // Save the answer and move to the next question
+                    const currentQuestion = questions[currentQuestionIndex];
+                    answers[currentQuestionIndex] = userAnswer; // Store by index or question key
+                    addMessage(userAnswer, 'user');
+                    currentQuestionIndex++;
+                    askQuestion();
+                }
             });
-
-            // Scroll to the bottom of the chatbot window after form injection
-            scrollToBottom();
+            askQuestion();
         }
-
-        function EmailForm() {
-            const formContainer = document.createElement('div');
-            formContainer.classList.add('form-container');
-
-            formContainer.innerHTML = `
-                <form class="contact-form">
-                    <div class="form-field">
-                        <label for="name">Name:</label>
-                        <input type="text" id="name" name="name" required placeholder="Enter your name" />
-                    </div>
-                    <div class="form-field">
-                        <label for="email">Email:</label>
-                        <input type="email" id="email" name="email" required placeholder="Enter your email" />
-                    </div>
-                    <div class="form-field">
-                        <label for="description">Why would you like to be contacted?</label>
-                        <textarea id="description" name="description" required placeholder="Enter your message" style="height: 150px;"></textarea>
-                    </div>
-                    <button type="submit" class="submit-btn">Submit</button>
-                </form>
-            `;
-
-            // Add the form to the chatbot window
-            const chatbotWindow = document.querySelector('.chatbot-window');
-            chatbotWindow.appendChild(formContainer);
-
-            // Add event listener for the form submission
-            const form = formContainer.querySelector('.contact-form');
-            form.addEventListener('submit', function (event) {
-                event.preventDefault();
-
-                // Collect form data
-                const formData = {
-                    name: form.querySelector('#name').value,
-                    email: form.querySelector('#email').value,
-                    description: form.querySelector('#description').value
-                };
-
-                // Log form data as JSON
-                console.log(JSON.stringify(formData));
-
-                chatbotWindow.removeChild(formContainer);
-
-                addMessage('Thank you message: Thank you for your interest in our property. A team member will reach out to you by email shortly.')
-
-                // Optionally reset the form after submission
-            });
-
-            // Scroll to the bottom of the chatbot window after form injection
-            scrollToBottom();
-        }
-
-        function PhoneForm() {
-            const formContainer = document.createElement('div');
-            formContainer.classList.add('form-container');
-
-            formContainer.innerHTML = `
-                <form class="contact-form">
-                    <div class="form-field">
-                        <label for="name">Name:</label>
-                        <input type="text" id="name" name="name" required placeholder="Enter your name" />
-                    </div>
-                    <div class="form-field">
-                        <label for="phone">Phone:</label>
-                        <input type="text" id="phone" name="Phone" required placeholder="Enter your Phone Number" />
-                    </div>
-                    <div class="form-field">
-                        <label for="description">Why would you like to be contacted?</label>
-                        <textarea id="description" name="description" required placeholder="Enter your message" style="height: 150px;"></textarea>
-                    </div>
-                    <button type="submit" class="submit-btn">Submit</button>
-                </form>
-            `;
-
-            // Add the form to the chatbot window
-            const chatbotWindow = document.querySelector('.chatbot-window');
-            chatbotWindow.appendChild(formContainer);
-
-            // Add event listener for the form submission
-            const form = formContainer.querySelector('.contact-form');
-            form.addEventListener('submit', function (event) {
-                event.preventDefault();
-
-                // Collect form data
-                const formData = {
-                    name: form.querySelector('#name').value,
-                    email: form.querySelector('#phone').value,
-                    description: form.querySelector('#description').value
-                };
-
-                // Log form data as JSON
-                console.log(JSON.stringify(formData));
-
-                chatbotWindow.removeChild(formContainer);
-
-                addMessage('Thank you message: Thank you for your interest in our property. A team member will call you shortly.')
-
-                // Optionally reset the form after submission
-            });
-
-            // Scroll to the bottom of the chatbot window after form injection
-            scrollToBottom();
-        }
-
 
         function handleOptionClick(option) {
             switch (currentStep) {
@@ -745,7 +637,7 @@
                     break;
 
                 case 'pricing':
-                    if (option.label == 'Availability') {
+                    if (option.label === 'Availability') {
                         openChatbot();
                     }
                     else {
@@ -762,11 +654,11 @@
                     addMessage(option.label, 'user');
                     if (option.label == 'Email') {
                         clearOptions()
-                        EmailForm()
+                        Form('Email')
                     }
                     else {
                         clearOptions()
-                        PhoneForm()
+                        Form('Phone Number')
                     }
                     break;
 
@@ -774,11 +666,20 @@
                     addMessage(option.label, 'user');
                     if (option.label == 'Email') {
                         clearOptions()
-                        CalenderEmailForm()
+                        Form('Email', calender = true)
                     }
                     else {
                         clearOptions()
-                        CalenderPhoneForm()
+                        Form('phone number', calender = true)
+                    }
+                    break;
+
+                case 'main':
+                    addMessage(option.label, 'user');
+                    if (option.label == 'Photos') {
+                        setTimeout(() => {
+                            Carousel();
+                        }, 300);
                     }
                     break;
 
