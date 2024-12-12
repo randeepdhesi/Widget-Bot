@@ -638,7 +638,12 @@
 
                 case 'pricing':
                     if (option.label === 'Availability') {
-                        openChatbot();
+                        try {
+                            messagesContainer.removeChild(option.label);
+                        }
+                        finally {
+                            openChatbot();
+                        }
                     }
                     else {
                         addMessage(option.label, 'user');
