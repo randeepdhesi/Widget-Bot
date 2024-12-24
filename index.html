@@ -47,9 +47,7 @@
     <script>
         const widget = document.querySelector('.chatbot-widget');
         const mainButton = widget.querySelector('.main-button');
-
         widget.classList.toggle('active');
-
         mainButton.addEventListener('click', function () {
 
         });
@@ -75,25 +73,30 @@
                     'Studio': [
                         { type: 'pill', label: 'Starting at $1915' },
                         { type: 'pill', label: 'Starting at $2145' },
-                        { type: 'pill', label: 'Any' }
+                        { type: 'pill', label: 'Any' },
+                        { type: 'pill', label: 'Back' }
                     ],
                     '1 Bedroom': [
                         { type: 'pill', label: 'Starting at $2415' },
                         { type: 'pill', label: 'Starting at $2845 (Unavailable)' },
-                        { type: 'pill', label: 'Any' }
+                        { type: 'pill', label: 'Any' },
+                        { type: 'pill', label: 'Back' }
                     ],
                     '2 Bedrooms': [
                         { type: 'pill', label: 'Starting at $2695' },
                         { type: 'pill', label: 'Starting at $3115' },
-                        { type: 'pill', label: 'Any' }
+                        { type: 'pill', label: 'Any' },
+                        { type: 'pill', label: 'Back' }
                     ],
                     '3 Bedrooms': [
                         { type: 'pill', label: 'Starting at $3275' },
                         { type: 'pill', label: 'Starting at $3715' },
-                        { type: 'pill', label: 'Any' }
+                        { type: 'pill', label: 'Any' },
+                        { type: 'pill', label: 'Back' }
                     ]
                 },
-                nextStep: 'moveIn'
+                nextStep: 'moveIn',
+                previousStep: 'welcome'
             },
             moveIn: {
                 message: "When are you thinking of moving in?",
@@ -101,9 +104,11 @@
                     { type: 'pill', label: 'ASAP' },
                     { type: 'pill', label: 'Next 30 Days' },
                     { type: 'pill', label: 'Next 60 Days' },
-                    { type: 'pill', label: 'Next 90 Days' }
+                    { type: 'pill', label: 'Next 90 Days' },
+                    { type: 'pill', label: 'Back' }
                 ],
-                nextStep: 'availability'
+                nextStep: 'availability',
+                previousStep: 'budget',
             },
             availability: {
                 message: null,
@@ -182,10 +187,7 @@
         }
 
         function renderOptions(options, optionType = 'image') {
-            // Always clear existing options first
             clearOptions();
-
-            // If no options, exit early
             if (!options || options.length === 0) return;
 
             const optionsContainer = document.createElement('div');
@@ -205,11 +207,6 @@
                         img.style.display = 'none';
                     };
                     optionElement.appendChild(img);
-
-                    // Uncomment if you want to add label back
-                    //const label = document.createElement('span');
-                    //label.textContent = option.label;
-                    //optionElement.appendChild(label);
                 } else {
                     optionElement.textContent = option.label;
                 }
@@ -222,10 +219,48 @@
                 messagesContainer.appendChild(optionsContainer);
             }, 300);
 
-            // Scroll to bottom
             scrollToBottom();
         }
 
+        function handleBack() {
+            const previousStep = conversationFlow[currentStep].previousStep;
+            if (previousStep) {
+                // Clear the last user message and bot response
+                const userMessage = messagesContainer.getElementsByClassName('user-message');
+                const botMessage = messagesContainer.getElementsByClassName('bot-message');
+
+                messagesContainer.removeChild(userMessage[userMessage.length - 1]);
+                messagesContainer.removeChild(botMessage[botMessage.length - 1]);
+                messagesContainer.removeChild(botMessage[botMessage.length - 1]);
+
+                // Update current step
+                currentStep = previousStep;
+
+                // Reset selected values based on step
+                if (currentStep === 'welcome') {
+                    selectedBedroom = null;
+                } else if (currentStep === 'budget') {
+                    selectedBudget = null;
+                } else if (currentStep === 'moveIn') {
+                    selectedMoveIn = null;
+                }
+
+                // Re-render the appropriate options for the previous step
+                if (currentStep === 'welcome') {
+                    addMessage(conversationFlow.welcome.message);
+                    renderOptions(conversationFlow.welcome.options);
+                } else if (currentStep === 'budget') {
+                    addMessage(conversationFlow.budget.message);
+                    renderOptions(conversationFlow.budget.dynamicOptions[selectedBedroom], 'pill');
+                } else if (currentStep === 'moveIn') {
+                    addMessage(conversationFlow.moveIn.message);
+                    renderOptions(conversationFlow.moveIn.options, 'pill');
+                } else if (currentStep === 'pricing') {
+                    addMessage(conversationFlow.pricing.message);
+                    renderOptions(conversationFlow.pricing.options, 'pill');
+                }
+            }
+        }
         function scrollToBottom() {
             // Slight delay to ensure DOM updates
             setTimeout(() => {
@@ -333,7 +368,7 @@
                 image: "properties_photos/1.png"
             },
             {
-                price: "$2,145/month",
+                price: "$1,000/month",
                 title: "S3",
                 beds: "1",
                 baths: "1",
@@ -343,7 +378,7 @@
                 image: "properties_photos/2.png"
             },
             {
-                price: "$2,415/month",
+                price: "$1,000/month",
                 title: "A1",
                 beds: "1",
                 baths: "1",
@@ -353,7 +388,7 @@
                 image: "properties_photos/3.png"
             },
             {
-                price: "$2,695/month",
+                price: "$1,000/month",
                 title: "J1",
                 beds: "2",
                 baths: "1",
@@ -373,7 +408,7 @@
                 image: "properties_photos/5.png"
             },
             {
-                price: "$3,275/month",
+                price: "$1,000/month",
                 title: "R3",
                 beds: "3",
                 baths: "2",
@@ -606,6 +641,10 @@
                     }, 1000);
                     break;
                 case 'budget':
+                    if (option.label === 'Back') {
+                        handleBack();
+                        break;
+                    }
                     selectedBudget = option.label;
                     addMessage(option.label, 'user');
                     setTimeout(() => {
@@ -616,12 +655,19 @@
                     break;
 
                 case 'moveIn':
+                    if (option.label === 'Back') {
+                        handleBack();
+                        break;
+                    }
                     selectedMoveIn = option.label;
                     addMessage(option.label, 'user');
                     setTimeout(() => {
                         addMessage(conversationFlow.availability.message);
                         clearOptions();
                         // Filter properties based on selected bedroom type and budget
+                        if (selectedBudget === 'Any') {
+                            selectedBudget = '999999'; // Set to high value to include all properties
+                        }
                         const filteredProperties = filterProperties(selectedBedroom, selectedBudget);
 
                         // If properties exist, generate cards
