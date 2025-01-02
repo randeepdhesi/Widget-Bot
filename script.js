@@ -292,8 +292,6 @@ function clearOptions() {
 }
 
 
-=======
->>>>>>> parent of 28654ac (made structure)
 function handleBack() {
     const previousStep = conversationFlow[currentStep].previousStep;
     if (previousStep) {
