@@ -27,25 +27,25 @@ const conversationFlow = {
                 { type: 'pill', label: 'Starting at $1915' },
                 { type: 'pill', label: 'Starting at $2145' },
                 { type: 'pill', label: 'Any' },
-                { type: 'pill', label: 'Back &#8617;' }
+                { type: 'pill', label: 'Back' }
             ],
             '1 Bedroom': [
                 { type: 'pill', label: 'Starting at $2415' },
                 { type: 'pill', label: 'Starting at $2845 (Unavailable)' },
                 { type: 'pill', label: 'Any' },
-                { type: 'pill', label: 'Back &#8617;' }
+                { type: 'pill', label: 'Back' }
             ],
             '2 Bedrooms': [
                 { type: 'pill', label: 'Starting at $2695' },
                 { type: 'pill', label: 'Starting at $3115' },
                 { type: 'pill', label: 'Any' },
-                { type: 'pill', label: 'Back &#8617;' }
+                { type: 'pill', label: 'Back' }
             ],
             '3 Bedrooms': [
                 { type: 'pill', label: 'Starting at $3275' },
                 { type: 'pill', label: 'Starting at $3715' },
                 { type: 'pill', label: 'Any' },
-                { type: 'pill', label: 'Back &#8617;' }
+                { type: 'pill', label: 'Back' }
             ]
         },
         nextStep: 'moveIn',
@@ -58,7 +58,7 @@ const conversationFlow = {
             { type: 'pill', label: 'Next 30 Days' },
             { type: 'pill', label: 'Next 60 Days' },
             { type: 'pill', label: 'Next 90 Days' },
-            { type: 'pill', label: 'Back &#8617;' }
+            { type: 'pill', label: 'Back' }
         ],
         nextStep: 'availability',
         previousStep: 'budget',
@@ -191,7 +191,7 @@ function handleOptionClick(option) {
             }, 500);
             break;
         case 'budget':
-            if (option.label === 'Back &#8617;') {
+            if (option.label === 'Back') {
                 handleBack();
                 break;
             }
@@ -205,7 +205,7 @@ function handleOptionClick(option) {
             break;
 
         case 'moveIn':
-            if (option.label === 'Back &#8617;') {
+            if (option.label === 'Back') {
                 handleBack();
                 break;
             }
