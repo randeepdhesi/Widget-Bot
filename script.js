@@ -175,7 +175,6 @@ function renderOptions(options, optionType = 'image') {
     scrollToBottom();
 }
 
-<<<<<<< HEAD
 function handleOptionClick(option) {
     switch (currentStep) {
         case 'welcome':
