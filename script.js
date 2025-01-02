@@ -9,6 +9,22 @@ const chatbotWindow = document.querySelector('.chatbot-window');
 const messagesContainer = document.querySelector('.chatbot-messages');
 const closeBtn = document.querySelector('.close-btn');
 
+
+// Close button functionality
+closeBtn.addEventListener('click', () => {
+    try {
+        inputContainer = document.querySelector('.input-container');
+        chatbotWindow.removeChild(inputContainer);
+    } catch (e) { }
+    chatbotWindow.style.display = 'none';
+    messagesContainer.innerHTML = '';
+    messagesContainer.scrollTop = 0;
+    currentStep = 'welcome';
+    selectedBedroom = null;
+    selectedBudget = null;
+    selectedMoveIn = null;
+});
+
 const conversationFlow = {
     welcome: {
         message: "Well hello there! How can I help you?",
@@ -134,11 +150,6 @@ function addMessage(message, type = 'bot') {
     scrollToBottom();
 }
 
-function clearOptions() {
-    const optionsContainer = document.querySelector('.chatbot-options');
-    if (optionsContainer) optionsContainer.remove();
-}
-
 function renderOptions(options, optionType = 'image') {
     clearOptions();
     if (!options || options.length === 0) return;
@@ -174,6 +185,123 @@ function renderOptions(options, optionType = 'image') {
 
     scrollToBottom();
 }
+
+function handleOptionClick(option) {
+    switch (currentStep) {
+        case 'welcome':
+            selectedBedroom = option.label;
+            addMessage(option.label, 'user');
+            setTimeout(() => {
+                addMessage(conversationFlow.budget.message);
+                renderOptions(
+                    conversationFlow.budget.dynamicOptions[selectedBedroom],
+                    'pill'
+                );
+                currentStep = 'budget';
+            }, 500);
+            break;
+        case 'budget':
+            if (option.label === 'Back') {
+                handleBack();
+                break;
+            }
+            selectedBudget = option.label;
+            addMessage(option.label, 'user');
+            setTimeout(() => {
+                addMessage(conversationFlow.moveIn.message);
+                renderOptions(conversationFlow.moveIn.options, 'pill');
+                currentStep = 'moveIn';
+            }, 500);
+            break;
+
+        case 'moveIn':
+            if (option.label === 'Back') {
+                handleBack();
+                break;
+            }
+            selectedMoveIn = option.label;
+            addMessage(option.label, 'user');
+            setTimeout(() => {
+                addMessage(conversationFlow.availability.message);
+                clearOptions();
+                // Filter properties based on selected bedroom type and budget
+                if (selectedBudget === 'Any') {
+                    selectedBudget = '999999'; // Set to high value to include all properties
+                }
+                const filteredProperties = filterProperties(selectedBedroom, selectedBudget);
+
+                // If properties exist, generate cards
+                if (filteredProperties.length > 0) {
+                    filteredProperties.forEach(property => {
+                        generateCard(property);
+                    });
+                } else {
+                    addMessage("Sorry, no properties match your selection.");
+                }
+                currentStep = 'availability';
+            }, 500);
+            break;
+
+        case 'pricing':
+            if (option.label === 'Availability') {
+                try {
+                    messagesContainer.removeChild(option.label);
+                }
+                finally {
+                    openChatbot();
+                }
+            }
+            else {
+                addMessage(option.label, 'user');
+                setTimeout(() => {
+                    addMessage(conversationFlow.appointment.message);
+                    renderOptions(conversationFlow.appointment.options, 'pill');
+                    currentStep = 'appointment';
+                }, 1000);
+                break;
+            }
+
+        case 'appointment':
+            addMessage(option.label, 'user');
+            if (option.label == 'Email') {
+                clearOptions()
+                Form('Email')
+            }
+            else {
+                clearOptions()
+                Form('Phone Number')
+            }
+            break;
+
+        case 'booking':
+            addMessage(option.label, 'user');
+            if (option.label == 'Email') {
+                clearOptions()
+                Form('Email', calender = true)
+            }
+            else {
+                clearOptions()
+                Form('phone number', calender = true)
+            }
+            break;
+
+        case 'main':
+            addMessage(option.label, 'user');
+            if (option.label == 'Photos') {
+                setTimeout(() => {
+                    Carousel();
+                }, 300);
+            }
+            break;
+
+    }
+}
+
+function clearOptions() {
+    const optionsContainer = document.querySelector('.chatbot-options');
+    if (optionsContainer) optionsContainer.remove();
+}
+
 
 function handleBack() {
     const previousStep = conversationFlow[currentStep].previousStep;
@@ -220,22 +348,6 @@ function scrollToBottom() {
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }, 50);
 }
-
-
-// Close button functionality
-closeBtn.addEventListener('click', () => {
-    try {
-        inputContainer = document.querySelector('.input-container');
-        chatbotWindow.removeChild(inputContainer);
-    } catch (e) { }
-    chatbotWindow.style.display = 'none';
-    messagesContainer.innerHTML = '';
-    messagesContainer.scrollTop = 0;
-    currentStep = 'welcome';
-    selectedBedroom = null;
-    selectedBudget = null;
-    selectedMoveIn = null;
-});
 
 // Expose function to open chatbot from external widget
 openChatbot = function () {
@@ -577,113 +689,3 @@ function Form(contact, calender = false) {
     askQuestion();
 }
 
-function handleOptionClick(option) {
-    switch (currentStep) {
-        case 'welcome':
-            selectedBedroom = option.label;
-            addMessage(option.label, 'user');
-            setTimeout(() => {
-                addMessage(conversationFlow.budget.message);
-                renderOptions(
-                    conversationFlow.budget.dynamicOptions[selectedBedroom],
-                    'pill'
-                );
-                currentStep = 'budget';
-            }, 500);
-            break;
-        case 'budget':
-            if (option.label === 'Back') {
-                handleBack();
-                break;
-            }
-            selectedBudget = option.label;
-            addMessage(option.label, 'user');
-            setTimeout(() => {
-                addMessage(conversationFlow.moveIn.message);
-                renderOptions(conversationFlow.moveIn.options, 'pill');
-                currentStep = 'moveIn';
-            }, 500);
-            break;
-
-        case 'moveIn':
-            if (option.label === 'Back') {
-                handleBack();
-                break;
-            }
-            selectedMoveIn = option.label;
-            addMessage(option.label, 'user');
-            setTimeout(() => {
-                addMessage(conversationFlow.availability.message);
-                clearOptions();
-                // Filter properties based on selected bedroom type and budget
-                if (selectedBudget === 'Any') {
-                    selectedBudget = '999999'; // Set to high value to include all properties
-                }
-                const filteredProperties = filterProperties(selectedBedroom, selectedBudget);
-
-                // If properties exist, generate cards
-                if (filteredProperties.length > 0) {
-                    filteredProperties.forEach(property => {
-                        generateCard(property);
-                    });
-                } else {
-                    addMessage("Sorry, no properties match your selection.");
-                }
-                currentStep = 'availability';
-            }, 500);
-            break;
-
-        case 'pricing':
-            if (option.label === 'Availability') {
-                try {
-                    messagesContainer.removeChild(option.label);
-                }
-                finally {
-                    openChatbot();
-                }
-            }
-            else {
-                addMessage(option.label, 'user');
-                setTimeout(() => {
-                    addMessage(conversationFlow.appointment.message);
-                    renderOptions(conversationFlow.appointment.options, 'pill');
-                    currentStep = 'appointment';
-                }, 1000);
-                break;
-            }
-
-        case 'appointment':
-            addMessage(option.label, 'user');
-            if (option.label == 'Email') {
-                clearOptions()
-                Form('Email')
-            }
-            else {
-                clearOptions()
-                Form('Phone Number')
-            }
-            break;
-
-        case 'booking':
-            addMessage(option.label, 'user');
-            if (option.label == 'Email') {
-                clearOptions()
-                Form('Email', calender = true)
-            }
-            else {
-                clearOptions()
-                Form('phone number', calender = true)
-            }
-            break;
-
-        case 'main':
-            addMessage(option.label, 'user');
-            if (option.label == 'Photos') {
-                setTimeout(() => {
-                    Carousel();
-                }, 300);
-            }
-            break;
-
-    }
-}
