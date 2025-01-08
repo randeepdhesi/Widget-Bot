@@ -29,7 +29,7 @@
                 </div>
             </div>
             <div class="main-button" onclick="main()">
-                <img src="icons for chatbot/chatbot-logo.png" alt="Chat Menu">
+                <img src="https://cdn.jsdelivr.net/gh/randeepdhesi/Widget-Bot/icons%20for%20chatbot/chatbot-logo.png" alt="Chat Menu">
             </div>
         </div>
     `;

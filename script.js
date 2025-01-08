@@ -29,10 +29,10 @@ const conversationFlow = {
     welcome: {
         message: "Well hello there! How can I help you?",
         options: [
-            { type: 'image', label: 'Studio', image: 'icons for chatbot/1.png' },
-            { type: 'image', label: '1 Bedroom', image: 'icons for chatbot/3.png' },
-            { type: 'image', label: '2 Bedrooms', image: 'icons for chatbot/5.png' },
-            { type: 'image', label: '3 Bedrooms', image: 'icons for chatbot/8.png' },
+            { type: 'image', label: 'Studio', image: 'https://cdn.jsdelivr.net/gh/randeepdhesi/Widget-Bot/icons%20for%20chatbot/1.png' },
+            { type: 'image', label: '1 Bedroom', image: 'https://cdn.jsdelivr.net/gh/randeepdhesi/Widget-Bot/icons%20for%20chatbot/3.png' },
+            { type: 'image', label: '2 Bedrooms', image: 'https://cdn.jsdelivr.net/gh/randeepdhesi/Widget-Bot/icons%20for%20chatbot/5.png' },
+            { type: 'image', label: '3 Bedrooms', image: 'https://cdn.jsdelivr.net/gh/randeepdhesi/Widget-Bot/icons%20for%20chatbot/8.png' },
         ],
         nextStep: 'budget'
     },
@@ -431,7 +431,7 @@ const propertyListings = [
         sqft: "390",
         address: "123 Main St, Downtown",
         type: "Studio",
-        image: "properties_photos/1.png"
+        image: "https://cdn.jsdelivr.net/gh/randeepdhesi/Widget-Bot/properties_photos/1.png"
     },
     {
         price: "$1,000/month",
@@ -441,7 +441,7 @@ const propertyListings = [
         sqft: "464",
         address: "456 High St, Downtown",
         type: "Studio",
-        image: "properties_photos/2.png"
+        image: "https://cdn.jsdelivr.net/gh/randeepdhesi/Widget-Bot/properties_photos/2.png"
     },
     {
         price: "$1,000/month",
@@ -451,7 +451,7 @@ const propertyListings = [
         sqft: "624",
         address: "789 Oak St, Downtown",
         type: "1 Bedroom",
-        image: "properties_photos/3.png"
+        image: "https://cdn.jsdelivr.net/gh/randeepdhesi/Widget-Bot/properties_photos/3.png"
     },
     {
         price: "$1,000/month",
@@ -461,7 +461,7 @@ const propertyListings = [
         sqft: "709",
         address: "101 Maple St, Downtown",
         type: "2 Bedrooms",
-        image: "properties_photos/4.png"
+        image: "https://cdn.jsdelivr.net/gh/randeepdhesi/Widget-Bot/properties_photos/4.png"
     },
     {
         price: "$3,115/month",
@@ -471,7 +471,7 @@ const propertyListings = [
         sqft: "840",
         address: "202 Pine St, Downtown",
         type: "2 Bedrooms",
-        image: "properties_photos/5.png"
+        image: "https://cdn.jsdelivr.net/gh/randeepdhesi/Widget-Bot/properties_photos/5.png"
     },
     {
         price: "$1,000/month",
@@ -481,7 +481,7 @@ const propertyListings = [
         sqft: "960",
         address: "202 Pine St, Downtown",
         type: "3 Bedrooms",
-        image: "properties_photos/6.png"
+        image: "https://cdn.jsdelivr.net/gh/randeepdhesi/Widget-Bot/properties_photos/6.png"
     },
     {
         price: "$3,715/month",
@@ -491,7 +491,7 @@ const propertyListings = [
         sqft: "973",
         address: "202 Pine St, Downtown",
         type: "3 Bedrooms",
-        image: "properties_photos/7.png"
+        image: "https://cdn.jsdelivr.net/gh/randeepdhesi/Widget-Bot/properties_photos/7.png"
     }
 ];
 
@@ -541,12 +541,12 @@ function Carousel() {
     carouselContainer.innerHTML = `
                 <div class="carousel">
                     <div class="carousel-track">
-                        <div class="carousel-slide"><img src="properties_photos/8.png" alt="Image 1"></div>
-                        <div class="carousel-slide"><img src="properties_photos/9.png" alt="Image 1"></div>
-                        <div class="carousel-slide"><img src="properties_photos/10.png" alt="Image 1"></div>
-                        <div class="carousel-slide"><img src="properties_photos/11.png" alt="Image 1"></div>
-                        <div class="carousel-slide"><img src="properties_photos/12.png" alt="Image 1"></div>
-                        <div class="carousel-slide"><img src="properties_photos/13.png" alt="Image 1"></div>
+                        <div class="carousel-slide"><img src="https://cdn.jsdelivr.net/gh/randeepdhesi/Widget-Bot/properties_photos/8.png" alt="Image 1"></div>
+                        <div class="carousel-slide"><img src="https://cdn.jsdelivr.net/gh/randeepdhesi/Widget-Bot/properties_photos/9.png" alt="Image 1"></div>
+                        <div class="carousel-slide"><img src="https://cdn.jsdelivr.net/gh/randeepdhesi/Widget-Bot/properties_photos/10.png" alt="Image 1"></div>
+                        <div class="carousel-slide"><img src="https://cdn.jsdelivr.net/gh/randeepdhesi/Widget-Bot/properties_photos/11.png" alt="Image 1"></div>
+                        <div class="carousel-slide"><img src="https://cdn.jsdelivr.net/gh/randeepdhesi/Widget-Bot/properties_photos/12.png" alt="Image 1"></div>
+                        <div class="carousel-slide"><img src="https://cdn.jsdelivr.net/gh/randeepdhesi/Widget-Bot/properties_photos/13.png" alt="Image 1"></div>
                     </div>
                     <button class="carousel-btn carousel-btn-left">&lt;</button>
                     <button class="carousel-btn carousel-btn-right">&gt;</button>
