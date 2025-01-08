@@ -416,6 +416,7 @@ main = function () {
     // Render welcome options after a short delay
     setTimeout(() => {
         renderOptions(conversationFlow.main.options);
+        chatbotWindow.appendChild(inputContainer);
     }, 100);
 }
 
@@ -587,6 +588,20 @@ function Carousel() {
     });
 }
 
+const inputField = document.createElement('input');
+inputField.type = 'text';
+inputField.placeholder = 'Type your answer here...';
+inputField.classList.add('chat-input');
+
+const sendButton = document.createElement('button');
+sendButton.textContent = 'Send';
+sendButton.classList.add('send-btn');
+
+const inputContainer = document.createElement('div');
+inputContainer.classList.add('input-container');
+inputContainer.appendChild(inputField);
+inputContainer.appendChild(sendButton);
+
 function Form(contact, calender = false) {
     let questions;
     if (calender == true) {
@@ -606,20 +621,6 @@ function Form(contact, calender = false) {
 
     const answers = {};
     let currentQuestionIndex = 0;
-
-    const inputField = document.createElement('input');
-    inputField.type = 'text';
-    inputField.placeholder = 'Type your answer here...';
-    inputField.classList.add('chat-input');
-
-    const sendButton = document.createElement('button');
-    sendButton.textContent = 'Send';
-    sendButton.classList.add('send-btn');
-
-    const inputContainer = document.createElement('div');
-    inputContainer.classList.add('input-container');
-    inputContainer.appendChild(inputField);
-    inputContainer.appendChild(sendButton);
 
     const chatbotWindow = document.querySelector('.chatbot-window');
     chatbotWindow.appendChild(inputContainer);

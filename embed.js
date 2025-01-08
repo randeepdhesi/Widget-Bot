@@ -2,7 +2,7 @@
     const chatbotHTML = `
         <div class="chatbot-window">
             <div class="chatbot-header">
-                <span>Agent Name</span>
+                <span>BellaBot</span>
                 <span class="close-btn">×</span>
             </div>
             <div class="chatbot-messages"></div>
