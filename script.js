@@ -5,6 +5,7 @@ mainButton.addEventListener('click', function () {
 
 });
 
+
 const chatbotWindow = document.querySelector('.chatbot-window');
 const messagesContainer = document.querySelector('.chatbot-messages');
 const closeBtn = document.querySelector('.close-btn');
