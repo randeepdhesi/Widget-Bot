@@ -590,7 +590,7 @@ function Carousel() {
 
 const inputField = document.createElement('input');
 inputField.type = 'text';
-inputField.placeholder = 'Type your answer here...';
+inputField.placeholder = 'Ask me anything...';
 inputField.classList.add('chat-input');
 
 const sendButton = document.createElement('button');
