@@ -636,7 +636,7 @@ function Form(contact, calender = false) {
                 inputField.placeholder = ''; // No placeholder for date
             } else {
                 inputField.type = 'text';
-                inputField.placeholder = 'Type your answer here...';
+                inputField.placeholder = 'Ask me anything...';
             }
 
             inputField.value = '';
