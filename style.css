@@ -117,6 +117,12 @@ body {
     z-index: 100;
 }
 
+@media screen and (max-width: 768px) {
+    .chatbot-window {
+        width: 90%; /* Adjust width for smaller screens */
+    }
+}
+
 .chatbot-header {
     background-color: #40ACCC;
     color: white;
